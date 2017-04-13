@@ -1,1 +1,5 @@
 Django>=1.11,<1.12
+django-enumfields
+django-authtools
+dj-database-url
+psycopg2
