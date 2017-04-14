@@ -32,7 +32,7 @@ class FilterForm(forms.Form):
     priority = forms.TypedMultipleChoiceField(
         required=False,
         widget=forms.CheckboxSelectMultiple,
-        choices=[(i.value, i.name) for i in Priority],
+        choices=[(i.value, i.label) for i in Priority],
         coerce=lambda p: Priority(int(p)),
     )
 
@@ -40,13 +40,13 @@ class FilterForm(forms.Form):
         required=False,
         widget=forms.CheckboxSelectMultiple,
         choices=[
-            ('new', 'New'),
-            ('entrusted', 'Entrusted'),
-            ('resolved', 'Resolved'),
-            ('verified', 'Verified'),
-            ('reopened', 'Reopened'),
-            ('live', 'Live'),
-            ('closed', 'Closed'),
+            (State.NEW.value, State.NEW.label),
+            (State.ENTRUSTED.value, State.ENTRUSTED.label),
+            ('resolved', 'resolved'),
+            (State.VERIFIED.value, State.VERIFIED.label),
+            (State.REOPENED.value, State.REOPENED.label),
+            (State.LIVE.value, State.LIVE.label),
+            (State.CLOSED.value, State.CLOSED.label),
         ],
     )
 

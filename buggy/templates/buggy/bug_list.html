@@ -58,9 +58,8 @@
       <td>{{ bug.modified_at|absolutedate }}</td>
       <td>{{ bug.created_by.get_short_name }}</td>
       <td>{{ bug.assigned_to.get_short_name }}</td>
-      {# TODO: Use pretty labels #}
-      <td>{{ bug.state.name }}</td>
-      <td>{{ bug.priority.name }}</td>
+      <td>{{ bug.state.label }}</td>
+      <td>{{ bug.priority.label }}</td>
     </tr>
     {% endfor %}
   </tbody>

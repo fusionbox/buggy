@@ -112,7 +112,7 @@ class SetState(models.Model):
 
     @property
     def description(self):
-        return 'changed the state to {}'.format(self.state)
+        return 'changed the state to {}'.format(self.state.label)
 
 
 class SetPriority(models.Model):
@@ -121,7 +121,7 @@ class SetPriority(models.Model):
 
     @property
     def description(self):
-        return 'set the priority to {}'.format(self.priority)
+        return 'set the priority to {}'.format(self.priority.label)
 
 
 class SetProject(models.Model):
