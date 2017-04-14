@@ -45,7 +45,8 @@ class BugListView(ListView):
 class BugDetailView(DetailView):
     queryset = Bug.objects.all().prefetch_related(
         Prefetch('actions', queryset=Action.objects.select_related(
-            'user', 'comment'
+            'user', 'comment', 'setpriority', 'setassignment__assigned_to',
+            'setstate',
         ))
     ).select_related(
         'created_by', 'assigned_to', 'project'
