@@ -2,6 +2,38 @@
 {% load buggy_tags %}
 
 {% block content %}
+
+<section>
+  <h2>Filters</h2>
+
+  <form method="get">
+    {{ form.non_field_errors }}
+    <fieldset>
+      <h3>General</h3>
+      {% include "buggy/_formfield.html" with field=form.projects %}
+      {% include "buggy/_formfield.html" with field=form.search %}
+      {% include "buggy/_formfield.html" with field=form.created_by %}
+      {% include "buggy/_formfield.html" with field=form.assigned_to %}
+    </fieldset>
+
+    <fieldset>
+      {% include "buggy/_formfield.html" with field=form.state %}
+    </fieldset>
+
+    <fieldset>
+      {% include "buggy/_formfield.html" with field=form.priority %}
+    </fieldset>
+
+    <input type="submit" value="Filter">
+  </form>
+
+  <h2>Preset Filters</h2>
+  <ul>
+    <li><a href="{% url 'buggy:bug_list' %}">Current</a></li>
+    <li><a href="{% url 'buggy:bug_list' %}?assigned_to={{ user.id }}">Mine</a></li>
+  </ul>
+</section>
+
 <table>
   <thead>
     <tr>
