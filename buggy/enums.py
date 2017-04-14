@@ -2,9 +2,9 @@ from enum import IntEnum, Enum
 
 
 class Priority(IntEnum):
-    LOW = 1
-    MEDIUM = 2
-    HIGH = 3
+    HOLD = 1
+    NORMAL = 2
+    URGENT = 3
 
 
 class State(Enum):
