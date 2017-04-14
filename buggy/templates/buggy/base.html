@@ -5,6 +5,13 @@
     <title>{% block title %}Buggy{% endblock %}</title>
     {% compress css %}
     <link rel="stylesheet" type="text/x-scss" href="{% static 'css/buggy.scss' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'select2/select2.min.css' %}">
+    {% endcompress %}
+
+    {% compress js %}
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'select2/select2.min.js' %}"></script>
+    <script src="{% static 'js/buggy.js' %}"></script>
     {% endcompress %}
   </head>
   <body>
