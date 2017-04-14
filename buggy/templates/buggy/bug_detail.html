@@ -1,6 +1,8 @@
 {% extends "buggy/base.html" %}
 {% load buggy_tags %}
 
+{% block title %}{{ block.super }} - {{ bug.title }}{% endblock %}
+
 {% block content %}
 <h1><input readonly value="#{{ bug.number }}">{{ bug.project }}: {{ bug.title }}</h1>
 <p>
