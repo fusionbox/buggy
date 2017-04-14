@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     'django_extensions',
     'authtools',
+    'compressor',
 
     'buggy',
 ]
@@ -114,3 +115,15 @@ STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'authtools.user'
 
 DATETIME_FORMAT = r'F j, Y \a\t P e'
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+)
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+COMPRESS_PRECOMPILERS = (
+    ('text/x-scss', 'django_pyscss.compressor.DjangoScssFilter'),
+)

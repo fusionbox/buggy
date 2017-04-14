@@ -1,7 +1,11 @@
 <!doctype html>
+{% load compress staticfiles %}
 <html>
   <head>
     <title>{% block title %}Buggy{% endblock %}</title>
+    {% compress css %}
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'css/buggy.scss' %}">
+    {% endcompress %}
   </head>
   <body>
     <header id="site_title">

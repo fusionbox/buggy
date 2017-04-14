@@ -8,3 +8,5 @@ django-dotenv
 markdown
 babel
 django-extensions
+django-compressor
+django-pyscss
