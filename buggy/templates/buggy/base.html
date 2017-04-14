@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+  <head>
+    <title>{% block title %}Buggy{% endblock %}</title>
+  </head>
+  <body>
+    <header id="site_title">
+      <h1><a href="{% url 'buggy:bug_list' %}">Buggy</a></h1>
+        <p><a href="/bug/new/" title="New Bug">+</a></p>
+        <p>Hello {{ user.get_short_name }}</p>
+      </section>
+    </header>
+    {% block content %}
+    {% endblock %}
+  </body>
+</html>

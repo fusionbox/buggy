@@ -3,3 +3,7 @@ django-enumfields
 django-authtools
 dj-database-url
 psycopg2
+django-debug-toolbar
+django-dotenv
+markdown
+babel

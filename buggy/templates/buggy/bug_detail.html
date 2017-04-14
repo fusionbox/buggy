@@ -1,0 +1,20 @@
+{% extends "buggy/base.html" %}
+{% load buggy_tags %}
+
+{% block content %}
+<h1><input readonly value="#{{ bug.number }}">{{ bug.project }}: {{ bug.title }}</h1>
+<p>
+  by {{ bug.created_by.get_short_name }}, {{ bug.created_at|relativedate }},
+  state is {{ bug.state }}, currently assigned to {{ bug.assigned_to.get_short_name }}
+</p>
+
+{% for action in bug.actions.all %}
+  <section>
+    <h1>{{ action.created_at|absolutedate }} {{ action.description }}</h1>
+    {% if action.comment %}
+      {{ action.comment.html|safe }}
+    {% endif %}
+  </section>
+{% endfor %}
+
+{% endblock %}

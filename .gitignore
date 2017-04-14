@@ -1,2 +1,4 @@
 db.sqlite3
 *.py[cod]
+.env
+settings_local.py
