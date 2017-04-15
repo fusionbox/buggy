@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'authtools',
     'compressor',
+    'graphene_django',
 
     'buggy',
 ]
