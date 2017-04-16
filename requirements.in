@@ -10,3 +10,5 @@ babel
 django-extensions
 django-compressor
 django-pyscss
+pytest
+pytest-django
