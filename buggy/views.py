@@ -1,8 +1,8 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Prefetch
 from django.http import Http404, JsonResponse
-from django.template.loader import render_to_string
-from django.utils.text import slugify
+from django.shortcuts import redirect
 from django.views.generic import DetailView, ListView, View
 
 from .models import Bug, Action
@@ -65,26 +65,18 @@ class BugDetailView(LoginRequiredMixin, DetailView):
 
 
 class AddPresetView(LoginRequiredMixin, View):
-    http_method_names = ['post']
-
     def post(self, request):
         data = request.POST.copy()
         data['user'] = request.user.id
         form = PresetFilterForm(data)
         if form.is_valid():
             obj = form.save()
-            html = render_to_string(
-                'buggy/_presetfilter.html', {'preset': obj}, request=request,
-            )
-            return JsonResponse({'html': html})
         else:
-            return JsonResponse({'errors': form.errors.as_json()}, status=400)
+            messages.error(request, 'Preset names must be unique.')
+        return redirect('buggy:bug_list')
 
 
 class RemovePresetView(LoginRequiredMixin, View):
-    http_method_names = ['post']
-
-    def post(self, request):
-        name = request.POST.get('name', '')
-        count, objects = request.user.presetfilter_set.filter(name=name).delete()
-        return JsonResponse({'slug': slugify(name)}, status=200 if bool(count) else 404)
+    def post(self, request, pk):
+        request.user.presetfilter_set.filter(pk=pk).delete()
+        return redirect('buggy:bug_list')

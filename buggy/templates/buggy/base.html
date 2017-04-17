@@ -2,7 +2,7 @@
 {% load compress staticfiles %}
 <html>
   <head>
-    <title>{% block title %}Buggy{% endblock %}</title>
+    <title>{% block title %}Buggy{% endblock title %}</title>
     {% compress css %}
     <link rel="stylesheet" type="text/x-scss" href="{% static 'css/buggy.scss' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'select2/select2.min.css' %}">
@@ -26,7 +26,17 @@
         {% endif %}
       </section>
     </header>
+    {% block messages %}
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endblock messages %}
+
     {% block content %}
-    {% endblock %}
+    {% endblock content %}
   </body>
 </html>

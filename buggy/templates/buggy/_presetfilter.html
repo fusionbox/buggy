@@ -1,8 +1,7 @@
-<li class="preset-item" id="preset-{{ preset.name|slugify }}">
+<li class="preset-item">
   <a href="{{ preset.url }}">{{ preset.name }}</a>
-  <form action="{% url 'buggy:remove_preset' %}" method="post" class="remove-preset">
+  <form action="{% url 'buggy:remove_preset' pk=preset.pk %}" method="post" class="remove-preset">
     {% csrf_token %}
-    <input type="hidden" name="name" value="{{ preset.name }}">
     <input type="submit" value="Remove Preset">
   </form>
 </li>
