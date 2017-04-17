@@ -3,7 +3,9 @@
 {% block content %}
 <form method="post">
   {% csrf_token %}
-  {{ form }}
+  {% for field in form %}
+  {% include 'buggy/_formfield.html' %}
+  {% endfor %}
   <p><a href="{% url "password_reset" %}">Forgot password?</a></p>
   <input type="submit" value="Log In">
 </form>
