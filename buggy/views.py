@@ -1,11 +1,13 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Prefetch
-from django.http import Http404
-from django.views.generic import ListView, DetailView
+from django.http import Http404, JsonResponse
+from django.template.loader import render_to_string
+from django.utils.text import slugify
+from django.views.generic import DetailView, ListView, View
 
 from .models import Bug, Action
 from .enums import State
-from .forms import FilterForm
+from .forms import FilterForm, PresetFilterForm
 from . import verhoeff
 
 
@@ -33,6 +35,7 @@ class BugListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = self.form
+        context['preset_form'] = PresetFilterForm()
         return context
 
     def get_queryset(self):
@@ -59,3 +62,29 @@ class BugDetailView(LoginRequiredMixin, DetailView):
         else:
             self.kwargs['pk'] = self.kwargs['bug_number'][:-1]
         return super().dispatch(*args, **kwargs)
+
+
+class AddPresetView(LoginRequiredMixin, View):
+    http_method_names = ['post']
+
+    def post(self, request):
+        data = request.POST.copy()
+        data['user'] = request.user.id
+        form = PresetFilterForm(data)
+        if form.is_valid():
+            obj = form.save()
+            html = render_to_string(
+                'buggy/_presetfilter.html', {'preset': obj}, request=request,
+            )
+            return JsonResponse({'html': html})
+        else:
+            return JsonResponse({'errors': form.errors.as_json()}, status=400)
+
+
+class RemovePresetView(LoginRequiredMixin, View):
+    http_method_names = ['post']
+
+    def post(self, request):
+        name = request.POST.get('name', '')
+        count, objects = request.user.presetfilter_set.filter(name=name).delete()
+        return JsonResponse({'slug': slugify(name)}, status=200 if bool(count) else 404)

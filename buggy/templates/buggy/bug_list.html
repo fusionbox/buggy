@@ -28,10 +28,19 @@
   </form>
 
   <h2>Preset Filters</h2>
-  <ul>
+  <ul class="preset-container">
     <li><a href="{% url 'buggy:bug_list' %}">Current</a></li>
-    <li><a href="{% url 'buggy:bug_list' %}?assigned_to={{ user.id }}">Mine</a></li>
+    <li><a href="{% url 'buggy:bug_list' %}?assigned_to={{ request.user.id }}">Mine</a></li>
+    {% for preset in request.user.presetfilter_set.all %}
+    {% include 'buggy/_presetfilter.html' %}
+    {% endfor %}
   </ul>
+  <form action="{% url 'buggy:add_preset' %}" method="post" class="add-preset">
+      {% csrf_token %}
+      {% include "buggy/_formfield.html" with field=preset_form.name %}
+      <input type="hidden" name="url" value="{{ request.get_full_path }}?{{ request.GET.urlencode }}">
+      <input type="submit" value="Add Preset">
+  </form>
 </section>
 
 <p>Bugs ({{ bugs|length }})</p>

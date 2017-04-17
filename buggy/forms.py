@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Q
 
 
-from .models import Project
+from .models import Project, PresetFilter
 from .enums import State, Priority
 
 User = get_user_model()
@@ -84,3 +84,9 @@ class FilterForm(forms.Form):
                 Q(actions__comment__comment__icontains=cd['search'])
             ).distinct()
         return qs
+
+
+class PresetFilterForm(forms.ModelForm):
+    class Meta:
+        model = PresetFilter
+        fields = ['user', 'name', 'url']

@@ -132,3 +132,18 @@ class SetProject(models.Model):
 class AddAttachment(models.Model):
     action = models.ForeignKey(Action, on_delete=models.CASCADE)
     file = models.FileField(upload_to='attachments/', max_length=255)
+
+
+class PresetFilter(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    name = models.CharField(max_length=50)
+    url = models.CharField(max_length=1000)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        unique_together = [
+            ('user', 'name'),
+        ]
+        ordering = ('name', )
