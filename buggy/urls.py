@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^(?P<bug_number>\d+)/$', views.BugDetailView.as_view(), name='bug_detail'),
     url(r'^add-preset/$', views.AddPresetView.as_view(), name='add_preset'),
     url(r'^remove-preset/(?P<pk>\d+)/$', views.RemovePresetView.as_view(), name='remove_preset'),
+    url(r'^create/$', views.BugCreateView.as_view(), name='bug_create'),
 ]

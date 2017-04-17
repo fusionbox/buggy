@@ -1,5 +1,5 @@
 {% extends "buggy/base.html" %}
-{% load buggy_tags %}
+{% load buggy_tags thumbnail %}
 
 {% block title %}{{ block.super }} - {{ bug.title }}{% endblock %}
 
@@ -7,7 +7,7 @@
 <h1><input readonly value="#{{ bug.number }}">{{ bug.project }}: {{ bug.title }}</h1>
 <p>
   by {{ bug.created_by.get_short_name }}, {{ bug.created_at|relativedate }},
-  state is {{ bug.state }}, currently assigned to {{ bug.assigned_to.get_short_name }}
+  state is {{ bug.state }}{% if bug.assigned_to %}, currently assigned to {{ bug.assigned_to.get_short_name }}{% endif %}.
 </p>
 
 {% for action in bug.actions.all %}
@@ -16,7 +16,27 @@
     {% if action.comment %}
       {{ action.comment.html|safe }}
     {% endif %}
+
+    {% if action.attachments.all %}
+      <section class="attachments">
+        <h3>Attachments</h3>
+        {% for attachment in action.attachments.all %}
+          <div class="attachment">
+            <a href="{{ attachment.file.url }}">
+              {% if attachment.is_image %}
+                {% thumbnail attachment.file "100x100" as im %}
+                  <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                {% endthumbnail %}
+              {% endif %}
+              {{ attachment.basename }}
+            </a>
+          </div>
+        {% endfor %}
+      </section>
+    {% endif %}
   </section>
 {% endfor %}
+
+{% include "buggy/_bug_form.html" %}
 
 {% endblock %}

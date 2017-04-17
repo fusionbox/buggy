@@ -5,9 +5,9 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 
-
 from .models import Project, PresetFilter
 from .enums import State, Priority
+from .fields import MultipleFileField
 
 User = get_user_model()
 
@@ -90,3 +90,25 @@ class PresetFilterForm(forms.ModelForm):
     class Meta:
         model = PresetFilter
         fields = ['user', 'name', 'url']
+
+
+class EditForm(forms.Form):
+    comment = forms.CharField(widget=forms.Textarea, required=False)
+    priority = forms.TypedChoiceField(
+        choices=[(i.value, i.label) for i in Priority],
+        coerce=lambda p: Priority(int(p)),
+        initial=Priority.NORMAL.value,
+    )
+    assign_to = forms.ModelChoiceField(
+        queryset=User.objects.filter(is_active=True),
+        required=False,
+    )
+    attachments = MultipleFileField(
+        required=False,
+    )
+
+
+class CreateForm(EditForm):
+    comment = forms.CharField(widget=forms.Textarea)
+    project = forms.ModelChoiceField(queryset=Project.objects.filter(is_active=True))
+    title = forms.CharField(max_length=100)

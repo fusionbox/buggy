@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'authtools',
     'compressor',
+    'sorl.thumbnail',
 ]
 
 MIDDLEWARE = [
@@ -130,3 +131,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 COMPRESS_PRECOMPILERS = (
     ('text/x-scss', 'django_pyscss.compressor.DjangoScssFilter'),
 )
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+THUMBNAIL_PRESERVE_FORMAT = True

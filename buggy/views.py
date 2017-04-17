@@ -1,14 +1,17 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Prefetch
-from django.http import Http404, JsonResponse
+from django.views.generic import ListView, FormView, View
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
-from django.views.generic import DetailView, ListView, View
+from django.db.models import Prefetch
+from django.db import transaction
+from django.utils.functional import cached_property
+from django.core.exceptions import ValidationError
 
 from .models import Bug, Action
-from .enums import State
 from .forms import FilterForm, PresetFilterForm
 from . import verhoeff
+from .mutation import BuggyBugMutator
 
 
 class BugListView(LoginRequiredMixin, ListView):
@@ -46,22 +49,80 @@ class BugListView(LoginRequiredMixin, ListView):
             return qs.none()
 
 
-class BugDetailView(LoginRequiredMixin, DetailView):
+class BugMutationMixin(object):
+    mutator_class = BuggyBugMutator
+
+    @cached_property
+    def state_machine(self):
+        return self.mutator_class(self.request.user, self.object)
+
+    def get_form_class(self):
+        return self.state_machine.get_form_class()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['actions'] = self.state_machine.get_actions()
+        return context
+
+    def form_valid(self, form):
+        try:
+            action = self.state_machine.process_form(form)
+        except ValidationError as e:
+            for error in e.error_list:
+                form.add_error(None, e)
+            return self.form_invalid(form)
+        else:
+            return HttpResponseRedirect(action.bug.get_absolute_url())
+
+
+class BugDetailView(LoginRequiredMixin, BugMutationMixin, FormView):
+    template_name = 'buggy/bug_detail.html'
+
     queryset = Bug.objects.all().prefetch_related(
         Prefetch('actions', queryset=Action.objects.select_related(
             'user', 'comment', 'setpriority', 'setassignment__assigned_to',
-            'setstate',
-        ))
+            'setstate', 'setproject', 'settitle',
+        ).prefetch_related('attachments'))
     ).select_related(
         'created_by', 'assigned_to', 'project'
     )
 
-    def dispatch(self, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().get(request, *args, **kwargs)
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
+
+    def get_object(self):
         if not verhoeff.validate_verhoeff(self.kwargs['bug_number']):
             raise Http404("Bug number checksum doesn't match")
         else:
-            self.kwargs['pk'] = self.kwargs['bug_number'][:-1]
-        return super().dispatch(*args, **kwargs)
+            pk = self.kwargs['bug_number'][:-1]
+            if self.request.method == 'POST':
+                # We'd like to just use select_for_update on the main queryset,
+                # but the select_related does a left join. Postgres does not
+                # support locking the outer side of an outer join. The SQL we
+                # want is `SELECT ... FOR UPDATE OF buggy_bug`, which would
+                # only lock the one table, but Django can't yet generate that
+                # SQL: <https://code.djangoproject.com/ticket/28010>.
+                # BBB: This extra query can be replaced with
+                # select_for_update(of=('self',)) as soon as it's supported in
+                # Django.
+                Bug.objects.all().select_for_update().get(pk=pk)
+            return self.queryset.get(pk=pk)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['bug'] = self.object
+        return context
+
+
+class BugCreateView(BugMutationMixin, FormView):
+    template_name = 'buggy/bug_create.html'
+    object = None
 
 
 class AddPresetView(LoginRequiredMixin, View):

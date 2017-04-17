@@ -18,11 +18,11 @@
     <header id="site_title">
       <h1><a href="{% url 'buggy:bug_list' %}">Buggy</a></h1>
         {% if request.user.is_authenticated %}
-        <p><a href="/bug/new/" title="New Bug">+</a></p>
-        <p>Hello {{ user.get_short_name }}</p>
-        <p><a href="{% url 'logout' %}">Logout</a></p>
+          <p><a href="{% url 'buggy:bug_create' %}" title="New Bug">+</a></p>
+          <p>Hello {{ user.get_short_name }}</p>
+          <p><a href="{% url 'logout' %}">Logout</a></p>
         {% else %}
-        <p><a href="{% url 'login' %}">Login</a></p>
+          <p><a href="{% url 'login' %}">Login</a></p>
         {% endif %}
       </section>
     </header>
