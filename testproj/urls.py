@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.conf import settings
 from django.contrib import admin
-import authtools.urls
+import authtools.views
 
 import buggy.urls
 
@@ -24,7 +24,17 @@ import buggy.urls
 urlpatterns = [
     url(r'^', include(buggy.urls)),
     url(r'^admin/', admin.site.urls),
-    url(r'^accounts/', include(authtools.urls)),
+
+    url(r'^login/$', authtools.views.LoginView.as_view(), name='login'),
+    url(r'^logout/$', authtools.views.LogoutView.as_view(pattern_name='login'), name='logout'),
+    url(r'^password_change/$', authtools.views.PasswordChangeView.as_view(), name='password_change'),
+    url(r'^password_change/done/$', authtools.views.PasswordChangeDoneView.as_view(), name='password_change_done'),
+    url(r'^password_reset/$', authtools.views.PasswordResetView.as_view(), name='password_reset'),
+    url(r'^password_reset/done/$', authtools.views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    url(r'^reset/done/$', authtools.views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        authtools.views.PasswordResetConfirmView.as_view(),
+        name='password_reset_confirm'),
 ]
 
 
