@@ -32,6 +32,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'testproj',
+    'buggy',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,8 +45,6 @@ INSTALLED_APPS = [
     'django_extensions',
     'authtools',
     'compressor',
-
-    'buggy',
 ]
 
 MIDDLEWARE = [
@@ -113,6 +114,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'authtools.user'
+
+LOGIN_REDIRECT_URL = '/'
 
 DATETIME_FORMAT = r'F j, Y \a\t P e'
 

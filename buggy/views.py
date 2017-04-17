@@ -1,6 +1,7 @@
-from django.views.generic import ListView, DetailView
-from django.http import Http404
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Prefetch
+from django.http import Http404
+from django.views.generic import ListView, DetailView
 
 from .models import Bug, Action
 from .enums import State
@@ -8,7 +9,7 @@ from .forms import FilterForm
 from . import verhoeff
 
 
-class BugListView(ListView):
+class BugListView(LoginRequiredMixin, ListView):
     queryset = Bug.objects.select_related(
         'project', 'created_by', 'assigned_to'
     ).order_by(
@@ -42,7 +43,7 @@ class BugListView(ListView):
             return qs.none()
 
 
-class BugDetailView(DetailView):
+class BugDetailView(LoginRequiredMixin, DetailView):
     queryset = Bug.objects.all().prefetch_related(
         Prefetch('actions', queryset=Action.objects.select_related(
             'user', 'comment', 'setpriority', 'setassignment__assigned_to',
