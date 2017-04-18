@@ -20,6 +20,7 @@ setup(
     long_description=read('README.md'),
     url='http://github.com/fusionbox/buggy',
     packages=find_packages(),
+    zip_safe=False,
     install_requires=[
         'babel>=2.4',
         'Django>=1.11',
