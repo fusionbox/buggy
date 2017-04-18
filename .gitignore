@@ -3,3 +3,6 @@ db.sqlite3
 .env
 settings_local.py
 /static/*
+.cache
+/media/*
+*.egg-info/
