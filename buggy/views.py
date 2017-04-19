@@ -131,7 +131,7 @@ class AddPresetView(LoginRequiredMixin, View):
         data['user'] = request.user.id
         form = PresetFilterForm(data)
         if form.is_valid():
-            obj = form.save()
+            form.save()
         else:
             messages.error(request, 'Preset names must be unique.')
         return redirect('buggy:bug_list')
