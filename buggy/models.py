@@ -215,12 +215,27 @@ class Comment(Operation):
     action = models.OneToOneField(Action, primary_key=True, on_delete=models.CASCADE)
     comment = models.TextField()
 
-    @property
-    def html(self):
-        return markdown.markdown(self.comment, extensions=[
+    def compile(self):
+        from .markdown import BuggyExtension
+        extension = BuggyExtension()
+        html = markdown.markdown(self.comment, extensions=[
             'markdown.extensions.extra',
             'markdown.extensions.headerid',
+            extension
         ])
+        return (html, extension.mentioned_users, extension.mentioned_bugs)
+
+    @property
+    def html(self):
+        return self.compile()[0]
+
+    @property
+    def mentioned_users(self):
+        return self.compile()[1]
+
+    @property
+    def mentioned_bugs(self):
+        return self.compile()[2]
 
 
 class SetTitle(Operation):
