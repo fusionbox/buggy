@@ -10,7 +10,6 @@ from django.core.exceptions import ValidationError
 
 from .models import Bug, Action
 from .forms import FilterForm, PresetFilterForm
-from . import verhoeff
 from .mutation import BuggyBugMutator
 
 
@@ -97,10 +96,7 @@ class BugDetailView(LoginRequiredMixin, BugMutationMixin, FormView):
         return super().post(request, *args, **kwargs)
 
     def get_object(self):
-        if not verhoeff.validate_verhoeff(self.kwargs['bug_number']):
-            raise Http404("Bug number checksum doesn't match")
-        else:
-            pk = self.kwargs['bug_number'][:-1]
+        try:
             if self.request.method == 'POST':
                 # We'd like to just use select_for_update on the main queryset,
                 # but the select_related does a left join. Postgres does not
@@ -111,8 +107,10 @@ class BugDetailView(LoginRequiredMixin, BugMutationMixin, FormView):
                 # BBB: This extra query can be replaced with
                 # select_for_update(of=('self',)) as soon as it's supported in
                 # Django.
-                Bug.objects.all().select_for_update().get(pk=pk)
-            return self.queryset.get(pk=pk)
+                Bug.objects.all().select_for_update().get_by_number(self.kwargs['bug_number'])
+            return self.queryset.get_by_number(self.kwargs['bug_number'])
+        except Bug.DoesNotExist as e:
+            raise Http404(*e.args)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

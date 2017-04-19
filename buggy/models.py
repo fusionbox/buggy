@@ -26,6 +26,14 @@ class Project(models.Model):
         return self.name
 
 
+class BugQuerySet(models.QuerySet):
+    def get_by_number(self, number):
+        if verhoeff.validate_verhoeff(number):
+            return self.get(pk=number[:-1])
+        else:
+            raise Bug.DoesNotExist("Bug number checksum doesn't match.")
+
+
 class Bug(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     modified_at = models.DateTimeField(auto_now=True)
@@ -45,6 +53,8 @@ class Bug(models.Model):
         on_delete=models.PROTECT,
         related_name='+'
     )
+
+    objects = BugQuerySet.as_manager()
 
     def __str__(self):
         return '#{} - {}'.format(self.number, self.title)
