@@ -43,10 +43,28 @@ def test_mentions():
     )
 
     comment = Comment(comment='test foo')
-    assert comment.mentions == set()
+    assert comment.mentioned_users == set()
 
     comment = Comment(comment='@test foo')
-    assert comment.mentions == {user}
+    assert comment.mentioned_users == {user}
 
     comment = Comment(comment='`@test foo`')
-    assert comment.mentions == set()
+    assert comment.mentioned_users == set()
+
+
+def test_bug_number_link(bug):
+    comment = Comment(comment='bug #{}'.format(bug.number))
+    assert comment.html == '<p>bug <a href="{}" title="{} - {}">#{}</a></p>'.format(
+        bug.get_absolute_url(),
+        bug.project,
+        bug.title,
+        bug.number,
+    )
+
+    comment = Comment(comment='bug #111111111111111'.format(bug.number))
+    assert comment.html == '<p>bug #111111111111111</p>'
+
+
+def test_mentioned_bugs(bug):
+    comment = Comment(comment='bug #{}'.format(bug.number))
+    assert comment.mentioned_bugs == {bug}

@@ -15,7 +15,6 @@ import markdown
 
 from .enums import State, Priority
 from . import verhoeff
-from .markdown import MentionExtension, MENTION_RE
 
 
 class Project(models.Model):
@@ -217,21 +216,26 @@ class Comment(Operation):
     comment = models.TextField()
 
     def compile(self):
-        mention_extension = MentionExtension()
+        from .markdown import BuggyExtension
+        extension = BuggyExtension()
         html = markdown.markdown(self.comment, extensions=[
             'markdown.extensions.extra',
             'markdown.extensions.headerid',
-            mention_extension
+            extension
         ])
-        return (html, mention_extension.mentions)
+        return (html, extension.mentioned_users, extension.mentioned_bugs)
 
     @property
     def html(self):
         return self.compile()[0]
 
     @property
-    def mentions(self):
+    def mentioned_users(self):
         return self.compile()[1]
+
+    @property
+    def mentioned_bugs(self):
+        return self.compile()[2]
 
 
 class SetTitle(Operation):
