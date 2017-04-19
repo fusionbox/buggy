@@ -220,6 +220,9 @@ class BuggyBugMutator(BugMutator):
                 bug=self.bug,
                 user=self.user
             )
+
+            if data['priority'] != action.bug.priority:
+                action.set_priority(data['priority'])
         else:
             action = Action.build_bug(
                 user=self.user,
@@ -245,9 +248,6 @@ class BuggyBugMutator(BugMutator):
 
         if data['action'] in {i.value for i in State}:
             action.set_state(State(data['action']))
-
-        if data['priority'] != self.bug.priority:
-            action.set_priority(data['priority'])
 
         for attachment in data['attachments']:
             action.add_attachment(attachment)
