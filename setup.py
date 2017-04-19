@@ -35,6 +35,7 @@ setup(
         'django-argonauts>=1.2',
         'django-ogmios>=0.10.0',
         'django-absoluteuri>=1.2.0',
+        'bleach>=2.0.0',
     ],
     extras_require={
         'buggy_accounts': [

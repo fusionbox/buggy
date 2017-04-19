@@ -11,7 +11,6 @@ from django.utils.text import get_text_list
 from django.utils.translation import ungettext
 
 from enumfields import EnumField, EnumIntegerField
-import markdown
 
 from .enums import State, Priority
 from . import verhoeff
@@ -219,9 +218,9 @@ class Comment(Operation):
     comment = models.TextField()
 
     def compile(self):
-        from .markdown import BuggyExtension
+        from .markdown import BuggyExtension, safe_markdown
         extension = BuggyExtension()
-        html = markdown.markdown(self.comment, extensions=[
+        html = safe_markdown(self.comment, extensions=[
             'markdown.extensions.extra',
             'markdown.extensions.headerid',
             extension

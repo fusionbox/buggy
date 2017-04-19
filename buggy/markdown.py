@@ -3,6 +3,8 @@ from django.contrib.auth import get_user_model
 from markdown.inlinepatterns import Pattern
 from markdown.extensions import Extension
 from markdown.util import etree
+import markdown
+import bleach
 
 from buggy.models import Bug
 
@@ -56,3 +58,24 @@ class BuggyExtension(Extension):
     def extendMarkdown(self, md, md_globals):
         md.inlinePatterns['mention'] = MentionPattern(r'(^|(?<=\s))@([A-z]+)\b', extension=self)
         md.inlinePatterns['bugnumber'] = BugNumberPattern(r'(^|(?<=\s))#(\d+)\b', extension=self)
+
+
+def safe_markdown(comment, extensions=[]):
+    html = markdown.markdown(comment, extensions=extensions)
+    return bleach.clean(
+        text=html,
+        tags=[
+            'a', 'abbr', 'acronym', 'b', 'blockqote', 'code', 'em', 'i', 'li',
+            'ol', 'strong', 'ul', 'p', 'span', 'h1', 'h2', 'h3', 'pre',
+            'blockquote', 'table', 'thead', 'tr', 'th', 'td', 'tbody', 'dl',
+            'dt', 'sup', 'div', 'hr',
+        ],
+        attributes={
+            '*': ['class'],
+            'a': ['href', 'title', 'class', 'id'],
+            'acronym': ['title'],
+            'abbr': ['title'],
+            'sup': ['id'],
+            'li': ['id']
+        },
+    )
