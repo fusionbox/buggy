@@ -15,6 +15,7 @@ import markdown
 
 from .enums import State, Priority
 from . import verhoeff
+from .markdown import MentionExtension, MENTION_RE
 
 
 class Project(models.Model):
@@ -215,12 +216,22 @@ class Comment(Operation):
     action = models.OneToOneField(Action, primary_key=True, on_delete=models.CASCADE)
     comment = models.TextField()
 
-    @property
-    def html(self):
-        return markdown.markdown(self.comment, extensions=[
+    def compile(self):
+        mention_extension = MentionExtension()
+        html = markdown.markdown(self.comment, extensions=[
             'markdown.extensions.extra',
             'markdown.extensions.headerid',
+            mention_extension
         ])
+        return (html, mention_extension.mentions)
+
+    @property
+    def html(self):
+        return self.compile()[0]
+
+    @property
+    def mentions(self):
+        return self.compile()[1]
 
 
 class SetTitle(Operation):
