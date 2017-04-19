@@ -183,7 +183,12 @@ class Action(models.Model):
 
     @transaction.atomic
     def commit(self):
-        for operation in self.pending_operations:
+        pending_operations = self.pending_operations
+        # This is reset early because post_save signals on the action could get
+        # duplicate operations otherwise.
+        self.pending_operations = []
+
+        for operation in pending_operations:
             operation.action = self
             operation.apply()
 
@@ -191,12 +196,10 @@ class Action(models.Model):
         self.bug = self.bug
         self.save()
 
-        for operation in self.pending_operations:
+        for operation in pending_operations:
             operation.action = self
             setattr(self, operation._meta.model_name, operation)
             operation.save(force_insert=True)
-
-        self.pending_operations = []
 
 
 class Operation(models.Model):
