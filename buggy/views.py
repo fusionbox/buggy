@@ -7,10 +7,14 @@ from django.db.models import Prefetch
 from django.db import transaction
 from django.utils.functional import cached_property
 from django.core.exceptions import ValidationError
+from django.contrib.auth import get_user_model
 
 from .models import Bug, Action
 from .forms import FilterForm, PresetFilterForm
 from .mutation import BuggyBugMutator
+from .enums import State
+
+User = get_user_model()
 
 
 class BugListView(LoginRequiredMixin, ListView):
@@ -61,6 +65,15 @@ class BugMutationMixin(object):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['actions'] = self.state_machine.get_actions()
+        context['buggy_user_names'] = [
+            user.get_short_name().lower() for user in User.objects.filter(is_active=True)
+        ]
+        context['buggy_open_bugs'] = [
+            {
+                'title': bug.title,
+                'number': bug.number,
+            } for bug in Bug.objects.exclude(state=State.CLOSED)
+        ]
         return context
 
     def form_valid(self, form):

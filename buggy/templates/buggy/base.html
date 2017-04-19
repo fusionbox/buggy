@@ -1,16 +1,29 @@
 <!doctype html>
-{% load compress staticfiles %}
+{% load compress staticfiles argonauts %}
 <html>
   <head>
     <title>{% block title %}Buggy{% endblock title %}</title>
     {% compress css %}
     <link rel="stylesheet" type="text/x-scss" href="{% static 'css/buggy.scss' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'select2/select2.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'atwho/css/jquery.atwho.min.css' %}">
     {% endcompress %}
+
+    {% if buggy_user_names %}
+      <script>
+        window.buggy_user_names = {{ buggy_user_names|json }};
+      </script>
+    {% endif %}
+    {% if buggy_open_bugs %}
+      <script>
+        window.buggy_open_bugs = {{ buggy_open_bugs|json }};
+      </script>
+    {% endif %}
 
     {% compress js %}
     <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
     <script src="{% static 'select2/select2.min.js' %}"></script>
+    <script src="{% static 'atwho/js/jquery.caret.min.js' %}"></script>
+    <script src="{% static 'atwho/js/jquery.atwho.min.js' %}"></script>
     <script src="{% static 'js/buggy.js' %}"></script>
     {% endcompress %}
   </head>

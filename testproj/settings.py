@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'authtools',
     'compressor',
     'sorl.thumbnail',
+    'argonauts',
 ]
 
 MIDDLEWARE = [
