@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'testproj',
     'buggy',
+    'buggy_accounts',
 
     'django.contrib.admin',
     'django.contrib.auth',

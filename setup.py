@@ -21,6 +21,7 @@ setup(
     url='http://github.com/fusionbox/buggy',
     packages=find_packages(),
     zip_safe=False,
+    include_package_data=True,
     install_requires=[
         'babel>=2.4',
         'Django>=1.11',
@@ -32,6 +33,11 @@ setup(
         'psycopg2>=2.7',
         'sorl-thumbnail>=12.4a1',
     ],
+    extras_require={
+        'buggy_accounts': [
+            'django-authtools>=1.5'
+        ],
+    },
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Web Environment',
