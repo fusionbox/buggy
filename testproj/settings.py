@@ -118,6 +118,8 @@ AUTH_USER_MODEL = 'authtools.user'
 
 LOGIN_REDIRECT_URL = '/'
 
+LOGIN_URL = 'login'
+
 DATETIME_FORMAT = r'F j, Y \a\t P e'
 
 STATICFILES_FINDERS = (
