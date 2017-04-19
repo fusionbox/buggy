@@ -33,6 +33,8 @@ setup(
         'psycopg2>=2.7',
         'sorl-thumbnail>=12.4a1',
         'django-argonauts>=1.2',
+        'django-ogmios>=0.10.0',
+        'django-absoluteuri>=1.2.0',
     ],
     extras_require={
         'buggy_accounts': [
