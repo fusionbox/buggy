@@ -31,6 +31,7 @@ setup(
         'pillow>=4.1',
         'psycopg2>=2.7',
         'sorl-thumbnail>=12.4a1',
+        'django-argonauts>=1.2',
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',

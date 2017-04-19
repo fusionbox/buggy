@@ -15,3 +15,4 @@ pytest-django
 # https://github.com/mariocesar/sorl-thumbnail/issues/458
 -e git+git://github.com/mariocesar/sorl-thumbnail@v12.3#egg=sorl-thumbnail
 pillow
+django-argonauts
