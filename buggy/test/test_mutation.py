@@ -1,40 +1,6 @@
-import pytest
-
-from django.contrib.auth import get_user_model
-
-from .models import Action, Project, Bug
-from .enums import Priority, State
-
-User = get_user_model()
-
-
-@pytest.fixture()
-def user(db):
-    return User.objects.create_user(
-        email='test@example.com',
-        name='Test User',
-        password='password1',
-    )
-
-
-@pytest.fixture()
-def project(db):
-    return Project.objects.create(
-        name='Project',
-    )
-
-
-@pytest.fixture()
-def bug(user, project):
-    action = Action.build_bug(
-        user=user,
-        title='title',
-        project=project,
-        priority=Priority.URGENT,
-        state=State.NEW,
-    )
-    action.commit()
-    return action.bug
+from buggy.models import Action, Bug
+from buggy.enums import Priority, State
+from .fixtures import user, project, bug
 
 
 def test_create_bug(user, project):
