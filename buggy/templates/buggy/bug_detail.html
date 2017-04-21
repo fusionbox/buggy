@@ -1,10 +1,25 @@
 {% extends "buggy/base.html" %}
-{% load buggy_tags thumbnail %}
+
+{% load buggy_tags thumbnail argonauts absoluteuri %}
 
 {% block title %}{{ block.super }} - {{ bug.title }}{% endblock %}
 
 {% block content %}
+<script>
+  window._harvestPlatformConfig = {
+    "applicationName": "Buggy",
+    "permalink": {{ bug.get_absolute_url|absolutize|json }}
+  };
+</script>
+<script async src="https://platform.harvestapp.com/assets/platform.js"></script>
+
+<div class="harvest-timer"
+  data-item='{"id": {{ bug.number|json|force_escape }}, "name": {{ bug.title|json|force_escape }}}'
+  data-group='{"id": {{ bug.project.id|json|force_escape }}, "name": {{ bug.project.name|json|force_escape }}}'
+></div>
+
 <h1><input readonly value="#{{ bug.number }}">{{ bug.project }}: {{ bug.title }}</h1>
+
 <p>
   by {{ bug.created_by.get_short_name }}, {{ bug.created_at|relativedate }},
   state is {{ bug.state }}{% if bug.assigned_to %}, currently assigned to {{ bug.assigned_to.get_short_name }}{% endif %}.
