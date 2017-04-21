@@ -3,7 +3,13 @@
 
   {% include "buggy/_formfield.html" with field=form.project %}
   {% include "buggy/_formfield.html" with field=form.title %}
-  {% include "buggy/_formfield.html" with field=form.comment %}
+
+  <div class="commentMarkdown">
+    {% include "buggy/_formfield.html" with field=form.comment %}
+    <button type="button" class="previewMarkdown" title="Preview markdown">view</button>
+    <div class="previewTarget" style="display: none;"></div>
+  </div>
+
   {% include "buggy/_formfield.html" with field=form.attachments %}
   {% include "buggy/_formfield.html" with field=form.priority %}
   {% include "buggy/_formfield.html" with field=form.assign_to %}

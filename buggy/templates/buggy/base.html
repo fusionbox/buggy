@@ -9,16 +9,18 @@
     <link rel="stylesheet" type="text/css" href="{% static 'atwho/css/jquery.atwho.min.css' %}">
     {% endcompress %}
 
-    {% if buggy_user_names %}
-      <script>
-        window.buggy_user_names = {{ buggy_user_names|json }};
-      </script>
-    {% endif %}
-    {% if buggy_open_bugs %}
-      <script>
-        window.buggy_open_bugs = {{ buggy_open_bugs|json }};
-      </script>
-    {% endif %}
+    {% url 'buggy:markdown_preview' as markdown_url %}
+    <script>
+      window.buggyData = {
+        previewMarkdownUrl: {{ markdown_url|json }}
+      };
+      {% if buggy_user_names %}
+        window.buggyData.userNames = {{ buggy_user_names|json }};
+      {% endif %}
+      {% if buggy_open_bugs %}
+        window.buggyData.openBugs = {{ buggy_open_bugs|json }};
+      {% endif %}
+    </script>
 
     {% compress js %}
     <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>

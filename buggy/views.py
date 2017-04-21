@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, FormView, View
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import redirect
 from django.db.models import Prefetch
 from django.db import transaction
@@ -9,7 +9,7 @@ from django.utils.functional import cached_property
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 
-from .models import Bug, Action
+from .models import Bug, Action, Comment
 from .forms import FilterForm, PresetFilterForm
 from .mutation import BuggyBugMutator
 from .enums import State
@@ -152,3 +152,8 @@ class RemovePresetView(LoginRequiredMixin, View):
     def post(self, request, pk):
         request.user.presetfilter_set.filter(pk=pk).delete()
         return redirect('buggy:bug_list')
+
+
+class MarkdownPreviewView(LoginRequiredMixin, View):
+    def post(self, request):
+        return HttpResponse(Comment(comment=request.POST.get('preview', '')).html)

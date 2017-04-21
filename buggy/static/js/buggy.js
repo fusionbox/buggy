@@ -17,10 +17,10 @@ jQuery(function($) {
 
   $('textarea[name="comment"]').atwho({
     at: '@',
-    data: window.buggy_user_names,
+    data: window.buggyData.userNames,
   }).atwho({
     at: '#',
-    data: window.buggy_open_bugs,
+    data: window.buggyData.openBugs,
     displayTpl: '<li data-value="#${number}">#${number} <small>${title}</small></li>',
     insertTpl: '#${number}',
     searchKey: 'number',
@@ -36,5 +36,41 @@ jQuery(function($) {
           return null;
       }
     }
+  });
+
+
+  // Only allow one request to preview markdown to the server at a time, but
+  // always do a preview with the latest content too.
+  var requestPending = false;
+  var requestCancelled = false;
+
+  function doPreview($container) {
+    if (requestPending) {
+      requestCancelled = true;
+      return;
+    }
+    requestPending = true;
+
+    var markdown = $container.find('[name="comment"]').val();
+
+    $.post(window.buggyData.previewMarkdownUrl, {preview: markdown}, function(resp) {
+      $container.find('.previewTarget').html(resp).show();
+      requestPending = false;
+      if (requestCancelled) {
+        requestCancelled = false;
+        doPreview($container);
+      }
+    });
+  }
+
+  $('.previewMarkdown').click(function() {
+    var $container = $(this).closest('.commentMarkdown');
+
+    $container.find('[name="comment"]').on('keyup', function() {
+      doPreview($container);
+    });
+    doPreview($container);
+
+    return false;
   });
 });
