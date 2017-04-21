@@ -14,4 +14,7 @@ urlpatterns = [
     url(r'^markdown-preview/$',
         csrf_exempt(views.MarkdownPreviewView.as_view()),
         name='markdown_preview'),
+    url(r'^git-commit-webhook/$',
+        csrf_exempt(views.GitCommitWebhookView.as_view()),
+        name='git_commit_webhook')
 ]

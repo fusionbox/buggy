@@ -1,18 +1,22 @@
+import json
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, FormView, View
-from django.http import Http404, HttpResponseRedirect, HttpResponse
+from django.http import Http404, HttpResponseRedirect, HttpResponse, HttpResponseForbidden
 from django.shortcuts import redirect
 from django.db.models import Prefetch
 from django.db import transaction
 from django.utils.functional import cached_property
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
+from django.conf import settings
 
 from .models import Bug, Action, Comment
 from .forms import FilterForm, PresetFilterForm
 from .mutation import BuggyBugMutator
 from .enums import State
+from . import webhook
 
 User = get_user_model()
 
@@ -78,7 +82,7 @@ class BugMutationMixin(object):
 
     def form_valid(self, form):
         try:
-            action = self.state_machine.process_form(form)
+            action = self.state_machine.process_action(form.cleaned_data)
         except ValidationError as e:
             for error in e.error_list:
                 form.add_error(None, e)
@@ -157,3 +161,18 @@ class RemovePresetView(LoginRequiredMixin, View):
 class MarkdownPreviewView(LoginRequiredMixin, View):
     def post(self, request):
         return HttpResponse(Comment(comment=request.POST.get('preview', '')).html)
+
+
+class GitCommitWebhookView(View):
+    def post(self, request):
+        if settings.GIT_COMMIT_WEBHOOK_SECRET is None or webhook.validate_signature(
+            settings.GIT_COMMIT_WEBHOOK_SECRET,
+            request.body,
+            request.META['HTTP_X_HUB_SIGNATURE'],
+        ):
+            data = json.loads(request.body.decode('utf-8'))
+            for commit in data['commits']:
+                webhook.process_commit(commit)
+            return HttpResponse('', status=201)
+        else:
+            return HttpResponseForbidden('Signature does not match.')

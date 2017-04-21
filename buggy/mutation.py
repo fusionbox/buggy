@@ -15,7 +15,7 @@ class BugMutator(object):
     def get_actions(self):
         raise NotImplementedError
 
-    def process_form(self, form):
+    def process_action(self, data):
         raise NotImplementedError
 
     def action_choices(self, actions=None):
@@ -193,9 +193,8 @@ class BuggyBugMutator(BugMutator):
         else:
             return ''
 
-    def process_form(self, form):
+    def process_action(self, data):
         errors = []
-        data = form.cleaned_data
 
         if data['action'] == State.ENTRUSTED.value \
                 and not (self.bug.assigned_to or data['assign_to']):
@@ -221,7 +220,7 @@ class BuggyBugMutator(BugMutator):
                 user=self.user
             )
 
-            if data['priority'] != action.bug.priority:
+            if data.get('priority') and data['priority'] != action.bug.priority:
                 action.set_priority(data['priority'])
         else:
             action = Action.build_bug(
@@ -232,11 +231,11 @@ class BuggyBugMutator(BugMutator):
                 state=State.ENTRUSTED if data['assign_to'] else State.NEW,
             )
 
-        if data['comment']:
+        if data.get('comment'):
             action.add_comment(data['comment'])
 
         assign_to = None
-        if data['assign_to']:
+        if data.get('assign_to'):
             assign_to = data['assign_to']
         elif data['action'] in {i.value for i in self.RESOLVED_STATES}:
             assign_to = self.bug.created_by
@@ -249,7 +248,7 @@ class BuggyBugMutator(BugMutator):
         if data['action'] in {i.value for i in State}:
             action.set_state(State(data['action']))
 
-        for attachment in data['attachments']:
+        for attachment in data.get('attachments', []):
             action.add_attachment(attachment)
 
         return action

@@ -145,3 +145,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 THUMBNAIL_PRESERVE_FORMAT = True
 
 SITE_ID = 1
+
+# Disables web hook, set to a secret random string or None (unsafe, disables
+# authentication completely) to enable.
+GIT_COMMIT_WEBHOOK_SECRET = os.urandom(16)
