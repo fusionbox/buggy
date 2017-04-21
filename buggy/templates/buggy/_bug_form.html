@@ -1,8 +1,12 @@
 <form method="post" enctype="multipart/form-data">
   {{ form.non_field_errors }}
 
-  {% include "buggy/_formfield.html" with field=form.project %}
-  {% include "buggy/_formfield.html" with field=form.title %}
+  {% if form.project %}
+    {% include "buggy/_formfield.html" with field=form.project %}
+  {% endif %}
+  {% if form.title %}
+    {% include "buggy/_formfield.html" with field=form.title %}
+  {% endif %}
 
   <div class="commentMarkdown">
     {% include "buggy/_formfield.html" with field=form.comment %}
