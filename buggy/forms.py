@@ -12,6 +12,10 @@ from .fields import MultipleFileField
 User = get_user_model()
 
 
+class UnwrappedCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
+    option_template_name = 'buggy/forms/widgets/checkbox_option_label_sibling.html'
+
+
 class FilterForm(forms.Form):
     projects = forms.ModelMultipleChoiceField(
         required=False,
@@ -31,14 +35,14 @@ class FilterForm(forms.Form):
 
     priority = forms.TypedMultipleChoiceField(
         required=False,
-        widget=forms.CheckboxSelectMultiple,
+        widget=UnwrappedCheckboxSelectMultiple,
         choices=[(i.value, i.label) for i in Priority],
         coerce=lambda p: Priority(int(p)),
     )
 
     state = forms.MultipleChoiceField(
         required=False,
-        widget=forms.CheckboxSelectMultiple,
+        widget=UnwrappedCheckboxSelectMultiple,
         choices=[
             (State.NEW.value, State.NEW.label),
             (State.ENTRUSTED.value, State.ENTRUSTED.label),
