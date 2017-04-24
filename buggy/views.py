@@ -33,6 +33,7 @@ class BugListView(LoginRequiredMixin, ListView):
     def get_form_kwargs(self):
         return {
             'data': self.request.GET,
+            'label_suffix': '',
         }
 
     def get_form(self):
@@ -45,7 +46,7 @@ class BugListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = self.form
-        context['preset_form'] = PresetFilterForm()
+        context['preset_form'] = PresetFilterForm(label_suffix='')
         return context
 
     def get_queryset(self):
@@ -89,6 +90,11 @@ class BugMutationMixin(object):
             return self.form_invalid(form)
         else:
             return HttpResponseRedirect(action.bug.get_absolute_url())
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['label_suffix'] = ''
+        return kwargs
 
 
 class BugDetailView(LoginRequiredMixin, BugMutationMixin, FormView):
