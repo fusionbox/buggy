@@ -10,7 +10,7 @@ from .mutation import BuggyBugMutator
 User = get_user_model()
 
 
-BUG_RE = re.compile(r'(fix(?:e[ds])?(?:\s+bug(?:gy)?)?)?(?:\s+|^)#([0-9]+\b)', re.IGNORECASE)
+BUG_RE = re.compile(r'(fix(?:e[ds])?(?:\s+bug(?:gy)?)?)?(?:\s+|^|\W+)#([0-9]+\b)', re.IGNORECASE)
 
 
 def validate_signature(secret, request_body, signature):

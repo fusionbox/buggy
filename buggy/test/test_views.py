@@ -12,6 +12,7 @@ def test_get_bugs_from_commit_message():
     assert get_bugs_from_commit_message('#1234') == ({'1234'}, set())
     assert get_bugs_from_commit_message('foo bar #1234 and #456') == ({'1234', '456'}, set())
     assert get_bugs_from_commit_message('fo#1234') == (set(), set())
+    assert get_bugs_from_commit_message('(#123)') == ({'123'}, set())
 
     assert get_bugs_from_commit_message('fixes #123') == (set(), {'123'})
     assert get_bugs_from_commit_message('fixes #123 and fixes #456') == (set(), {'123', '456'})
