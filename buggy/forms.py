@@ -69,7 +69,7 @@ class FilterForm(forms.Form):
         if cd['created_by']:
             qs = qs.filter(created_by=cd['created_by'])
         if cd['assigned_to']:
-            qs = qs.filter(created_by=cd['assigned_to'])
+            qs = qs.filter(assigned_to=cd['assigned_to'])
         if cd['priority']:
             qs = qs.filter(priority__in=cd['priority'])
         if cd['state']:
