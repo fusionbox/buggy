@@ -56,6 +56,12 @@ class BugListView(LoginRequiredMixin, ListView):
         else:
             return qs.none()
 
+    def get_template_names(self):
+        if self.request.META.get('HTTP_X_PJAX'):
+            return ['buggy/_bug_list.html']
+        else:
+            return super().get_template_names()
+
 
 class BugMutationMixin(object):
     mutator_class = BuggyBugMutator

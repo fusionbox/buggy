@@ -1,0 +1,32 @@
+{% load buggy_tags %}
+
+<p>Bugs ({{ bugs|length }})</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>No.</th>
+      <th>Project</th>
+      <th>Bug</th>
+      <th>Last Modified</th>
+      <th>Creator</th>
+      <th>Assigned To</th>
+      <th>State</th>
+      <th>Priority</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for bug in bugs %}
+    <tr>
+      <td>{{ bug.number }}</td>
+      <td>{{ bug.project }}</td>
+      <td><a href="{{ bug.get_absolute_url }}">{{ bug.title }}</a></td>
+      <td>{{ bug.modified_at|absolutedate }}</td>
+      <td>{{ bug.created_by.get_short_name }}</td>
+      <td>{{ bug.assigned_to.get_short_name }}</td>
+      <td>{{ bug.state.label }}</td>
+      <td>{{ bug.priority.label }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

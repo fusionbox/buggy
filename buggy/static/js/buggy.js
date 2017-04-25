@@ -73,4 +73,47 @@ jQuery(function($) {
 
     return false;
   });
+
+  // Pjax
+  $.pjax.defaults.scrollTo = false;
+  var pjaxRequestPending = false;
+  var pjaxRequestCanceled = false;
+
+  $(document).on('pjax:send', function() {
+    pjaxRequestPending = true;
+    pjaxRequestCanceled = false;
+    $('#pjax-container').addClass('loading');
+  })
+
+  $(document).on('pjax:complete', function() {
+    pjaxRequestPending = false;
+    $('#add-preset-url').val(location.pathname + location.search)
+
+    if (pjaxRequestCanceled) {
+      pjaxRequestCanceled = false;
+      pjaxSubmit();
+    } else {
+      pjaxRequestCanceled = false;
+    }
+
+    $('#pjax-container').removeClass('loading');
+  })
+
+  function pjaxSubmit() {
+    if (pjaxRequestPending) {
+      pjaxRequestCanceled = true;
+      return;
+    } else {
+      $('form[data-pjax]').submit();
+    }
+  }
+  $(document).on('submit', 'form[data-pjax]', function(event) {
+    $.pjax.submit(event, '#pjax-container');
+  });
+  $('form[data-pjax] :input:not(#id_search)').on('change', pjaxSubmit);
+  $('form[data-pjax] #id_search').on('keyup', pjaxSubmit);
+
+  $(document).on('pjax:popstate', function(event) {
+    location.reload();
+  });
 });

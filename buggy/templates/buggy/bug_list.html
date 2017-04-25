@@ -1,12 +1,11 @@
 {% extends "buggy/base.html" %}
-{% load buggy_tags %}
 
 {% block content %}
 
 <section>
   <h2>Filters</h2>
 
-  <form method="get">
+  <form data-pjax action="{% url 'buggy:bug_list' %}" method="get">
     {{ form.non_field_errors }}
     <fieldset>
       <h3>General</h3>
@@ -24,7 +23,10 @@
       {% include "buggy/_formfield.html" with field=form.priority %}
     </fieldset>
 
-    <input type="submit" value="Filter">
+    <noscript>
+        {# The form is normally submitted  by pjax #}
+        <input type="submit" value="Filter">
+    </noscript>
   </form>
 
   <h2>Preset Filters</h2>
@@ -38,39 +40,13 @@
   <form action="{% url 'buggy:add_preset' %}" method="post" class="add-preset">
       {% csrf_token %}
       {% include "buggy/_formfield.html" with field=preset_form.name %}
-      <input type="hidden" name="url" value="{{ request.get_full_path }}?{{ request.GET.urlencode }}">
+      <input type="hidden" name="url" value="{{ request.get_full_path }}?{{ request.GET.urlencode }}" id="add-preset-url">
       <input type="submit" value="Add Preset">
   </form>
 </section>
 
-<p>Bugs ({{ bugs|length }})</p>
+<section id="pjax-container">
+{% include 'buggy/_bug_list.html' %}
+</section>
 
-<table>
-  <thead>
-    <tr>
-      <th>No.</th>
-      <th>Project</th>
-      <th>Bug</th>
-      <th>Last Modified</th>
-      <th>Creator</th>
-      <th>Assigned To</th>
-      <th>State</th>
-      <th>Priority</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for bug in bugs %}
-    <tr>
-      <td>{{ bug.number }}</td>
-      <td>{{ bug.project }}</td>
-      <td><a href="{{ bug.get_absolute_url }}">{{ bug.title }}</a></td>
-      <td>{{ bug.modified_at|absolutedate }}</td>
-      <td>{{ bug.created_by.get_short_name }}</td>
-      <td>{{ bug.assigned_to.get_short_name }}</td>
-      <td>{{ bug.state.label }}</td>
-      <td>{{ bug.priority.label }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
 {% endblock %}
