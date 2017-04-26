@@ -26,7 +26,8 @@ class BugListView(LoginRequiredMixin, ListView):
         'project', 'created_by', 'assigned_to'
     ).order_by(
         '-modified_at'
-    )
+    ).defer('fulltext')  # We don't use the column, so there's no need to detoast a long string.
+
     context_object_name = 'bugs'
     form_class = FilterForm
 
@@ -83,7 +84,7 @@ class BugMutationMixin(object):
             {
                 'title': bug.title,
                 'number': bug.number,
-            } for bug in Bug.objects.exclude(state=State.CLOSED)
+            } for bug in Bug.objects.exclude(state=State.CLOSED).defer('fulltext')
         ]
         return context
 

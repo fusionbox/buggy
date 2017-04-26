@@ -105,7 +105,12 @@ A bug tracker.
               buggy_action
          WHERE buggy_setproject.action_id = buggy_action.id
            AND buggy_action.bug_id = ids.bug_id
-         ORDER BY "order" DESC LIMIT 1)
+         ORDER BY "order" DESC LIMIT 1),
+        string_agg(comment, ' ') || ' ' || string_agg(title, ' ')
       FROM (SELECT DISTINCT bug_id FROM buggy_action) ids
+      LEFT JOIN buggy_action ON (ids.bug_id = buggy_action.bug_id)
+      LEFT JOIN buggy_settitle ON (buggy_action.id = buggy_settitle.action_id)
+      LEFT JOIN buggy_comment ON (buggy_action.id = buggy_comment.action_id)
+      GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9
     )
     INSERT INTO buggy_bug (SELECT * FROM derived_bugs);

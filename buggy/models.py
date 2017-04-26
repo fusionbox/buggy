@@ -52,6 +52,7 @@ class Bug(models.Model):
         on_delete=models.PROTECT,
         related_name='+'
     )
+    fulltext = models.TextField()
 
     objects = BugQuerySet.as_manager()
 
@@ -217,6 +218,9 @@ class Comment(Operation):
     action = models.OneToOneField(Action, primary_key=True, on_delete=models.CASCADE)
     comment = models.TextField()
 
+    def apply(self):
+        self.action.bug.fulltext += ' ' + self.comment
+
     def compile(self):
         from .markdown import BuggyExtension, safe_markdown
         extension = BuggyExtension()
@@ -246,6 +250,7 @@ class SetTitle(Operation):
 
     def apply(self):
         self.action.bug.title = self.title
+        self.action.bug.fulltext += ' ' + self.title
 
 
 class SetAssignment(Operation):
