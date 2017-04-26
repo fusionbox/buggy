@@ -58,6 +58,9 @@ class BugListView(LoginRequiredMixin, ListView):
     def get_sort_links(self):
         sort_links = {}
         querydict = self.request.GET.copy()
+        if '_pjax' in querydict:
+            del querydict['_pjax']  # pjax adds this param for cache purposes.
+
         current_sort, desc = self.sort_type()
         for order_field in self.ORDER_FIELDS.keys():
             if 'desc' in querydict:
