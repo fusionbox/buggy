@@ -22,6 +22,17 @@ User = get_user_model()
 
 
 class BugListView(LoginRequiredMixin, ListView):
+    ORDER_FIELDS = {
+        'number': 'id',
+        'project': 'project__name',
+        'bug': 'title',
+        'modified': 'modified_at',
+        'creator': 'created_by__name',
+        'assigned_to': 'assigned_to__name',
+        'state': 'state',
+        'priority': 'priority',
+    }
+
     queryset = Bug.objects.select_related(
         'project', 'created_by', 'assigned_to'
     ).order_by(
@@ -44,16 +55,33 @@ class BugListView(LoginRequiredMixin, ListView):
         self.form = self.get_form()
         return super().get(*args, **kwargs)
 
+    def get_sort_links(self):
+        sort_links = {}
+        querydict = self.request.GET.copy()
+        current_sort, desc = self.sort_type()
+        for order_field in self.ORDER_FIELDS.keys():
+            if 'desc' in querydict:
+                del querydict['desc']
+            if current_sort == order_field and not desc:
+                querydict['desc'] = True
+            querydict['sort'] = order_field
+            sort_links[order_field] = '?{}'.format(querydict.urlencode())
+        return sort_links
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = self.form
         context['preset_form'] = PresetFilterForm(label_suffix='')
+        context['sort_links'] = self.get_sort_links()
+        context['sort_by'], context['sort_desc'] = self.sort_type()
         return context
 
     def get_queryset(self):
         qs = super().get_queryset()
         if self.form.is_valid():
-            return self.form.filter(qs)
+            qs = self.form.filter(qs)
+            order_field, desc = self.sort_type()
+            return qs.order_by(('-' if desc else '') + self.ORDER_FIELDS[order_field])
         else:
             return qs.none()
 
@@ -62,6 +90,13 @@ class BugListView(LoginRequiredMixin, ListView):
             return ['buggy/_bug_list.html']
         else:
             return super().get_template_names()
+
+    def sort_type(self):
+        order_field = self.request.GET.get('sort')
+        if order_field not in self.ORDER_FIELDS:
+            return ('modified', True)
+        else:
+            return (order_field, bool(self.request.GET.get('desc')))
 
 
 class BugMutationMixin(object):

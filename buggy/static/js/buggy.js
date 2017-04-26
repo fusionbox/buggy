@@ -107,6 +107,11 @@ jQuery(function($) {
       $('form[data-pjax]').submit();
     }
   }
+
+  $(document).on('click', 'a[data-pjax]', function(event) {
+    $.pjax.click(event, '#pjax-container');
+  })
+
   $(document).on('submit', 'form[data-pjax]', function(event) {
     $.pjax.submit(event, '#pjax-container');
   });
