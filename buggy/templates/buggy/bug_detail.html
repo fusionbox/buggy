@@ -18,7 +18,7 @@
   data-group='{"id": {{ bug.project.id|json|force_escape }}, "name": {{ bug.project.name|json|force_escape }}}'
 ></div>
 
-<h1><input readonly value="#{{ bug.number }}">{{ bug.project }}: {{ bug.title }}</h1>
+<h1><input readonly value="#{{ bug.number }}"><a href="{{ bug.project.get_absolute_url }}">{{ bug.project }}</a>: {{ bug.title }}</h1>
 
 <p>
   by {{ bug.created_by.get_short_name }}, {{ bug.created_at|relativedate }},

@@ -21,6 +21,9 @@ class Project(models.Model):
     name = CICharField(max_length=100, unique=True)
     is_active = models.BooleanField(default=True)
 
+    def get_absolute_url(self):
+        return '{}?projects={}'.format(urls.reverse('buggy:bug_list'), self.id)
+
     def __str__(self):
         return self.name
 
