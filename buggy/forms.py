@@ -82,11 +82,20 @@ class FilterForm(forms.Form):
                 )
             qs = qs.filter(functools.reduce(operator.or_, conds))
         if cd['search']:
-            # TODO: actual fulltext search
-            qs = qs.filter(
-                Q(title__icontains=cd['search']) |
-                Q(actions__comment__comment__icontains=cd['search'])
-            ).distinct()
+            # We use extra here instead of the builtin __search filter because
+            # it's extremely inefficient when used with .annotate() (we need to
+            # annotate in order to set the 'english' config, to match the
+            # expression in our functional index).
+            # <https://code.djangoproject.com/ticket/28128>
+            qs = qs.extra(
+                where=[
+                    '''
+                        to_tsvector('english', COALESCE("buggy_bug"."fulltext", '')) @@
+                            plainto_tsquery('english', %s)
+                    '''
+                ],
+                params=[cd['search']]
+            )
         return qs
 
 
