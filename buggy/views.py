@@ -145,12 +145,7 @@ class BugMutationMixin(object):
 class BugDetailView(LoginRequiredMixin, BugMutationMixin, FormView):
     template_name = 'buggy/bug_detail.html'
 
-    queryset = Bug.objects.all().prefetch_related(
-        Prefetch('actions', queryset=Action.objects.select_related(
-            'user', 'comment', 'setpriority', 'setassignment__assigned_to',
-            'setstate', 'setproject', 'settitle',
-        ).prefetch_related('attachments'))
-    ).select_related(
+    queryset = Bug.objects.select_related(
         'created_by', 'assigned_to', 'project'
     )
 

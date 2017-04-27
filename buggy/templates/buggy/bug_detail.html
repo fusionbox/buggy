@@ -1,10 +1,12 @@
 {% extends "buggy/base.html" %}
 
-{% load buggy_tags thumbnail argonauts absoluteuri %}
+{% load buggy_tags thumbnail argonauts absoluteuri cache %}
 
 {% block title %}{{ block.super }} - {{ bug.title }}{% endblock %}
 
 {% block content %}
+{% cache 31536000 bug_detail bug.id bug.modified_at %}
+
 <script>
   window._harvestPlatformConfig = {
     "applicationName": "Buggy",
@@ -12,6 +14,7 @@
   };
 </script>
 <script async src="https://platform.harvestapp.com/assets/platform.js"></script>
+
 
 <div class="harvest-timer"
   data-item='{"id": {{ bug.number|json|force_escape }}, "name": {{ bug.title|json|force_escape }}}'
@@ -25,7 +28,7 @@
   state is {{ bug.state }}{% if bug.assigned_to %}, currently assigned to {{ bug.assigned_to.get_short_name }}{% endif %}.
 </p>
 
-{% for action in bug.actions.all %}
+{% for action in bug.actions_preloaded %}
   <section>
     <h1>{{ action.created_at|absolutedate }} {{ action.description }}</h1>
     {% if action.comment %}
@@ -51,6 +54,8 @@
     {% endif %}
   </section>
 {% endfor %}
+
+{% endcache %}
 
 {% include "buggy/_bug_form.html" %}
 

@@ -69,6 +69,13 @@ class Bug(models.Model):
     def get_absolute_url(self):
         return urls.reverse('buggy:bug_detail', kwargs={'bug_number': self.number})
 
+    @property
+    def actions_preloaded(self):
+        return self.actions.select_related(
+            'user', 'comment', 'setpriority', 'setassignment__assigned_to',
+            'setstate', 'setproject', 'settitle',
+        ).prefetch_related('attachments')
+
 
 class Action(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
