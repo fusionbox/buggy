@@ -37,6 +37,7 @@
     <header id="site_title">
       <nav>
         <a class="logo" href="{% url 'buggy:bug_list' %}">Buggy</a>
+        {% block loginArea %}
         {% if request.user.is_authenticated %}
         <a class="button newBugButton" href="{% url 'buggy:bug_create' %}" title="New Bug">+ New Bug</a>
         <section class="navLoginState">
@@ -45,6 +46,7 @@
         {% else %}
           <a href="{% url 'login' %}">Log In</a>
         {% endif %}
+        {% endblock loginArea %}
       </nav>
     </header>
     {% block messages %}
