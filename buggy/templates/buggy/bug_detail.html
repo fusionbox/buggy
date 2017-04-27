@@ -41,8 +41,8 @@
 
 {% for action in bug.actions_preloaded %}
 
-  <section class="bugDetailAction">
-    <h1>{{ action.created_at|absolutedate }}</h1>
+  <section class="bugDetailAction" id="action-{{ action.order }}">
+    <h1><a href="#action-{{ action.order }}">{{ action.created_at|absolutedate }}</a></h1>
     <p class="bugDetailActionDescription"><strong>&raquo;</strong> <span> {{ action.user.get_short_name }} {{ action.description }}</span></p>
     {% if action.comment %}
       {{ action.comment.html|safe }}
