@@ -79,7 +79,7 @@ jQuery(function($) {
   var pjaxRequestPending = false;
   var pjaxRequestCanceled = false;
 
-  $(document).on('pjax:send', function() {
+  $(document).on('pjax:beforeSend', function() {
     pjaxRequestPending = true;
     pjaxRequestCanceled = false;
     $('#pjax-container').addClass('loading');
