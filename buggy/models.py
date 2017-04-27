@@ -124,10 +124,7 @@ class Action(models.Model):
                 ) % {'count': attachment_count}
             )
 
-        return '{} {}'.format(
-            self.user.get_short_name(),
-            get_text_list(descriptions, 'and')
-        )
+        return get_text_list(descriptions, 'and')
 
     @classmethod
     @transaction.atomic
@@ -253,6 +250,9 @@ class Comment(Operation):
     def mentioned_bugs(self):
         return self.compile()[2]
 
+    @property
+    def description(self):
+        return 'commented on the bug'
 
 class SetTitle(Operation):
     action = models.OneToOneField(Action, primary_key=True, on_delete=models.CASCADE)

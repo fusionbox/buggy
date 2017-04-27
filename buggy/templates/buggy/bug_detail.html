@@ -30,7 +30,7 @@
 
 {% for action in bug.actions_preloaded %}
   <section>
-    <h1>{{ action.created_at|absolutedate }} {{ action.description }}</h1>
+    <h1>{{ action.created_at|absolutedate }} {{ action.user.get_short_name }} {{ action.description }}</h1>
     {% if action.comment %}
       {{ action.comment.html|safe }}
     {% endif %}

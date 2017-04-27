@@ -11,6 +11,7 @@ from django.utils.functional import cached_property
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.conf import settings
+from django.template.defaultfilters import capfirst
 
 from .models import Bug, Action, Comment
 from .forms import FilterForm, PresetFilterForm
@@ -134,6 +135,7 @@ class BugMutationMixin(object):
                 form.add_error(None, e)
             return self.form_invalid(form)
         else:
+            messages.success(self.request, capfirst(action.description))
             return HttpResponseRedirect(action.bug.get_absolute_url())
 
     def get_form_kwargs(self):
