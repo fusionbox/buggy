@@ -1,0 +1,124 @@
+.bugMetadata {
+  margin-bottom: 1rem;
+
+  .harvest-timer {
+    display: inline-block;
+    vertical-align: middle;
+    background-image: none;
+
+    &.styled,
+    &.styled.running,
+    &.styled:hover,
+    &.styled.running:hover {
+      border-width: 2px;
+      border-color: transparentize($colorPrimary, .5);
+      border-radius: 0;
+      text-align: center;
+      padding-top: .2rem;
+      background-image: none;
+      width: 26px;
+      height: 24px;
+    }
+  }
+
+  .bugDetailProject {
+    font-size: .9rem;
+    font-family: $fontMonospace;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    margin-left: .6rem;
+    font-weight: 700;
+    box-shadow: none;
+    line-height: 2.125;
+
+    strong {
+      font-weight: 700;
+    }
+  }
+
+  .bugNumber {
+    border: 0;
+    margin: 0;
+    color: $colorPrimary;
+    vertical-align: baseline;
+  }
+}
+
+.bugDetailCurrentState,
+.bugDetailActionDescription {
+  display: flex;
+  font-family: $fontMonospace;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  max-width: 40rem;
+  line-height: 1.4;
+
+  > strong {
+    font-weight: 400;
+    margin-right: .25rem;
+    font-size: 1.2rem;
+    display: inline-block;
+    position: relative;
+    top: -4px;
+  }
+}
+
+
+.bugDetailAction {
+  border-top: 4px solid currentColor;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  max-width: 64rem;
+
+  ul,
+  ol {
+    padding-left: 1rem;
+    margin-bottom: 1.5rem;
+
+    li {
+      margin-bottom: .2rem;
+    }
+  }
+
+  .attachments {
+    @include inset;
+    padding: 1rem 2rem;
+
+    h3 {
+      margin-top: 0;
+    }
+
+    .attachment {
+      display: flex;
+      margin-right: 2rem;
+      font-family: monospace;
+      max-width: 120px;
+      flex-wrap: wrap;
+      a {
+        box-shadow: none;
+        text-shadow: none;
+        margin-right: 2rem;
+      }
+    }
+
+    img {
+      display: block;
+      margin-bottom: .4rem;
+    }
+  }
+
+  .mention {
+    @include betterUnderline;
+    font-weight: 600;
+  }
+}
+
+
+.bugMetadataTitle {
+  font-size: 1.8rem;
+  max-width: 44rem;
+  font-weight: 900;
+  margin-top: 0;
+  margin-bottom: .5rem;
+  line-height: 1.1;
+}

@@ -1,0 +1,205 @@
+input,
+select {
+  -webkit-appearance: none;
+  margin-bottom: .5rem;
+  padding: .5rem;
+  font-size: 1rem;
+  font-family: inherit;
+  background-color: $white;
+  color: $colorPrimary;
+  font-weight: 600;
+
+  &::placeholder,
+  ::-webkit-input-placeholder {
+    font-style: italic;
+    font-weight: 400;
+    color: $colorPrimaryTint;
+  }
+
+  &:focus {
+    box-shadow: none;
+    outline: none;
+    border-color: $inputBorderFocusColor;
+  }
+}
+
+input {
+  background-color: $white;
+  color: $colorActivePrimary;
+
+  &:focus {
+    outline: 0;
+  }
+
+  &[type="text"] {
+    min-height: 40px;
+  }
+
+  &[type="submit"] {
+    @include button;
+
+    &:hover {
+      color: $colorActivePrimary;
+    }
+  }
+
+  &[type="checkbox"] {
+    margin-bottom: 2rem;
+    padding-left: 2rem;
+    border: 0;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &:focus {
+      box-shadow: none;
+      outline: 0;
+    }
+
+    &:before {
+      content: '';
+      position: absolute;
+      left: 2px;
+      top: 0;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 2px $colorPrimaryShade;
+      transition: background-color .2s ease;
+    }
+
+    &:checked:before {
+      z-index: 2;
+      background-color: $colorPrimary;
+
+      &:hover {
+
+      }
+    }
+
+    &:hover:checked:before {
+      background-color: $colorPrimary;
+      border-color: $colorPrimary;
+    }
+  }
+
+  &[type="file"] {
+    padding: 0;
+    background-color: transparent;
+    font-family: $fontMonospace;
+    color: $colorPrimary;
+    font-size: .875rem;
+  }
+}
+
+textarea {
+  border: 2px solid $colorPrimary;
+  background: $white;
+  padding: 1rem;
+  color: $colorPrimary;
+
+  &:focus {
+    outline: 0;
+  }
+}
+
+.formField {
+  margin-bottom: 1rem;
+}
+
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: .7rem;
+}
+
+fieldset {
+  padding-right: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+select {
+  padding-right: 2rem;
+}
+
+select,
+span.select2-container {
+  -webkit-appearance: none;
+  width: 100%;
+  margin-bottom: 1rem;
+  border-radius: 0;
+  font-size: 1rem;
+  font-family: $fontMonospace;
+  background-color: $white;
+  background-image: url('../img/chevron-down.svg');
+  background-position: calc(100% - 10px) 50%;
+  background-repeat: no-repeat;
+}
+
+input,
+select,
+.select-2 {
+  width: 100%;
+  border: 2px solid $inputBorderColor;
+  background-color: $white;
+}
+
+// Select2-Specific Styles
+.select2-container--default {
+  max-width: 500px;
+}
+.select2-selection__rendered {
+  margin-top: 5px !important;
+  color: $colorPrimary !important;
+  background-image: url('../img/chevron-down.svg');
+  background-position: calc(100% - 10px) 50%;
+  background-repeat: no-repeat;
+}
+
+.select2-selection__choice {
+  max-width: calc(100% - 2.25rem);
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+}
+
+span.select2-container--default .select2-selection--multiple  {
+  border: 2px solid $colorPrimary;
+  border-radius: 0;
+
+  .select2-selection__choice {
+    background-color: transparentize($colorPrimary, .9);
+
+    .select2-selection__choice__remove {
+      color: $colorPrimary;
+    }
+  }
+}
+
+
+.select2-container--default {
+    span.select2-selection--multiple,
+    span.select2-selection--single {
+    border-radius: 0;
+    border-width: 2px;
+    min-height: 40px;
+    border-color: $inputBorderColor;
+    background-color: $white;
+
+    .select2-selection__choice {
+      border-radius: 0;
+      border: 0;
+    }
+
+    .select2-selection__arrow {
+      display: none;
+    }
+  }
+
+  &.select2-container--focus span.select2-selection--multiple {
+    border-width: 2px;
+    border-color: $inputBorderFocusColor;
+  }
+}

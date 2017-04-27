@@ -1,0 +1,364 @@
+.bugListTable {
+  border-collapse: collapse;
+  min-width: 100%;
+  margin-bottom: 4rem;
+
+  td,
+  th {
+    padding: .75rem 1rem .5rem 1rem;
+    font-size: .925rem;
+
+    &:first-of-type {
+      padding-left: 0;
+    }
+  }
+
+  td {
+    border-bottom: 1px solid transparentize($colorPrimary, .95);
+  }
+
+  th {
+    white-space: nowrap;
+    border-bottom: 3px solid currentColor;
+    border-top: 3px solid currentColor;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    vertical-align: bottom;
+    font-weight: 600;
+
+    a {
+      box-shadow: none;
+      position: relative;
+
+      &.active:before {
+        content: url('../img/chevron-down.svg');
+        position: absolute;
+        left: -1.25rem;
+        transform: rotate(180deg);
+      }
+
+      &.active.desc:before {
+        transform: rotate(0);
+      }
+    }
+  }
+
+  tbody tr:first-of-type td {
+    // Additional offset from header on first row
+    padding-top: 1.25rem;
+  }
+}
+
+@keyframes glyph {
+  0% {
+    content: '\25A7';
+    transform: scale(.75);
+  }
+
+  25% {
+    content: '\25A6';
+    opacity: 1;
+  }
+
+  50% {
+    content: '\25A8';
+    transform: scale(1);
+  }
+
+  75% {
+    content: '\25A5';
+    opacity: .75;
+  }
+
+  100% {
+    content: '\25A4';
+    opacity: 1;
+  }
+}
+
+// Bug list wrapper
+#pjax-container {
+  position: relative;
+  top: 0;
+
+  &.loading {
+    height: 100px;
+
+    &:after {
+      content: 'loading...';
+      position: absolute;
+      font-weight: 700;
+      letter-spacing: 4px;
+      width: 100%;
+      text-align: center;
+      padding-left: 2rem;
+      bottom: -3.5rem;
+      text-transform: uppercase;
+      font-family: $fontMonospace;
+    }
+
+    &:before {
+      position: absolute;
+      bottom: -3.75rem;
+      left: calc(50% - 4.5rem);
+      content: '';
+      font-size: 1.25rem;
+      animation-name: glyph;
+      animation-iteration-count: infinite;
+      animation-duration: .5s;
+    }
+
+    td {
+      opacity: 0;
+      border-bottom-color: transparent;
+    }
+  }
+}
+
+
+
+// Preset List Styles
+.presetContainer {
+  @include topStroke;
+  padding: 0;
+
+  h2 {
+    font-weight: 600;
+  }
+
+  ul {
+    list-style: none;
+
+    a {
+      font-weight: 400;
+    }
+  }
+}
+
+.presetFilterList {
+  list-style: none;
+  padding-left: 0;
+
+  li {
+    position: relative;
+    margin-bottom: .5rem;
+
+    a {
+      box-shadow: none;
+      text-shadow: none;
+      padding-left: 1.5rem;
+    }
+
+    &.presetLocked a {
+      padding-left: 0;
+    }
+  }
+}
+
+.presetItem {
+  position: relative;
+
+  form {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+
+    &:hover {
+      opacity: .2;
+    }
+
+    &:before {
+      content: url('../img/delete.svg');
+      width: 15px;
+      vertical-align: -1px;
+      text-align: center;
+      display: inline-block;
+    }
+  }
+}
+
+.presetLocked {
+  padding-left: 0;
+  margin-right: 3px;
+
+  i:before {
+    content: url('../img/lock.svg');
+    margin-right: .2rem;
+  }
+}
+
+.remove-preset {
+  width: 100%;
+
+  input[type="submit"] {
+    border: 0;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+}
+
+.add-preset {
+  @include topStroke(2px);
+  font-size: 1rem;
+  padding-top: 1rem;
+
+  label {
+    // Todo: actually remove this from the DOM
+    display: none;
+  }
+}
+
+.addPresetActions {
+  display: flex;
+
+  .formField {
+    margin-bottom: 0;
+  }
+
+  input {
+    height: 3.2rem;
+    margin-bottom: 0;
+  }
+
+  input[type='submit'] {
+    align-self: flex-end;
+    background-color: $colorPrimary;
+    color: $colorBackground;
+    border: 2px solid $colorPrimary;
+    border-left: 0;
+    margin-left: 0rem;
+    flex-basis: 20px;
+
+    &:hover {
+      background-color: $linkHoverColor;
+    }
+  }
+}
+
+.help-text {
+  font-size: .875rem;
+  font-style: italic;
+}
+
+// Bug Table Cells
+.bugListNumber {
+
+  &td {
+    font-family: $fontMonospace;
+    letter-spacing: 1px;
+  }
+}
+
+.bugListState {
+
+  td& {
+    font-variant: small-caps;
+    letter-spacing: .02rem;
+    font-weight: 600;
+  }
+}
+
+.bugListProject {
+  th& {
+  }
+}
+
+.bugListCount {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  position: relative;
+
+  span {
+    font-weight: 400;
+    letter-spacing: 1px;
+    font-variant: small-caps;
+    text-transform: lowercase;
+    font-size: 1rem;
+    padding: .5rem 1rem;
+    background-color: $colorPrimary;
+    border-left: 4px solid $colorPrimaryShade;
+    color: $colorBackground;
+    border-bottom: $colorPrimaryShade;
+  }
+}
+
+.bugFilterGroup {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  grid-column-gap: 2rem;
+
+  &__wrap {
+    display: grid;
+    grid-template-columns: 4fr 1fr;
+    grid-column-gap: 2rem;
+  }
+
+  &__section {
+    padding-left: 0;
+    padding-top: 1rem;
+    border: 0;
+    @include topStroke;
+
+    label {
+      margin-bottom: .2rem;
+      position: relative;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+  }
+
+  .formField {
+    margin-bottom: 1rem;
+
+    &.state,
+    &.priority {
+      input {
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+
+      li {
+        line-height: 1.1;
+        position: relative;
+        margin-bottom: 1.1rem;
+
+        label {
+          cursor: pointer;
+          color: $colorPrimary;
+          text-transform: uppercase;
+          font-weight: 600;
+          padding-left: 1.6rem;
+
+          &:hover {
+            color: $linkHoverColor;
+          }
+        }
+      }
+    }
+  }
+}
+
+.bugFilterButton {
+  margin-bottom: auto;
+  margin-top: 2rem;
+  color: $blue;
+  background-color: transparent;
+}
+
+.filterSectionTitle {
+  grid-column: 1 / 4;
+}
+
+.filterList {
+  list-style: none;
+  padding-left: 0;
+}

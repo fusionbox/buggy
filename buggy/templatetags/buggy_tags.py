@@ -12,7 +12,7 @@ register = template.Library()
 @register.filter
 def relativedate(d):
     return format_html(
-        '<time title="{}" datetime="{}">{} ago</time>',
+        '<time class="relativeDate" title="{}" datetime="{}">{} ago</time>',
         date_format(timezone.localtime(d), settings.DATETIME_FORMAT),
         d.isoformat(),
         format_timedelta(timezone.now() - d),
@@ -22,7 +22,7 @@ def relativedate(d):
 @register.filter
 def absolutedate(d):
     return format_html(
-        '<time title="{} ago" datetime="{}">{}</time>',
+        '<time class="absoluteDate" title="{} ago" datetime="{}">{}</time>',
         format_timedelta(timezone.now() - d),
         d.isoformat(),
         date_format(timezone.localtime(d), settings.DATETIME_FORMAT),

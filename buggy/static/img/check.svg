@@ -1,0 +1,7 @@
+<svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="check" transform="translate(0.000000, -1.000000)" fill-rule="nonzero" fill="#fff">
+            <path d="M5.294,14.998 C4.859,14.998 4.447,14.795 4.183,14.445 L0.61,9.724 C0.145,9.111 0.266,8.238 0.88,7.773 C1.495,7.306 2.368,7.429 2.833,8.043 L5.184,11.147 L11.095,1.655 C11.502,1.003 12.362,0.803 13.016,1.21 C13.669,1.616 13.87,2.476 13.462,3.13 L6.478,14.34 C6.236,14.731 5.817,14.975 5.358,14.996 C5.336,14.998 5.316,14.998 5.294,14.998 Z" id="Shape"></path>
+        </g>
+    </g>
+</svg>

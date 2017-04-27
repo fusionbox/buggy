@@ -8,6 +8,8 @@
     <link rel="stylesheet" type="text/css" href="{% static 'select2/select2.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'atwho/css/jquery.atwho.min.css' %}">
     {% endcompress %}
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,700|Work+Sans:300,400,600,900" rel="stylesheet">
 
     {% url 'buggy:markdown_preview' as markdown_url %}
     <script>
@@ -27,21 +29,23 @@
     <script src="{% static 'select2/select2.min.js' %}"></script>
     <script src="{% static 'atwho/js/jquery.caret.min.js' %}"></script>
     <script src="{% static 'atwho/js/jquery.atwho.min.js' %}"></script>
-    <script src="{% static 'js/buggy.js' %}"></script>
     <script src="{% static 'js/jquery.pjax.js' %}"></script>
+    <script src="{% static 'js/buggy.js' %}"></script>
     {% endcompress %}
   </head>
   <body>
     <header id="site_title">
-      <h1><a href="{% url 'buggy:bug_list' %}">Buggy</a></h1>
+      <nav>
+        <a class="logo" href="{% url 'buggy:bug_list' %}">Buggy</a>
         {% if request.user.is_authenticated %}
-          <p><a href="{% url 'buggy:bug_create' %}" title="New Bug">+</a></p>
-          <p>Hello {{ user.get_short_name }}</p>
-          <p><a href="{% url 'logout' %}">Logout</a></p>
+        <a class="button newBugButton" href="{% url 'buggy:bug_create' %}" title="New Bug">+ New Bug</a>
+        <section class="navLoginState">
+          <p class="greeting">Hello {{ user.get_short_name }} | <a href="{% url 'logout' %}" class="logoutLink">Log Out</a></p>
+        </section>
         {% else %}
-          <p><a href="{% url 'login' %}">Login</a></p>
+          <a href="{% url 'login' %}">Log In</a>
         {% endif %}
-      </section>
+      </nav>
     </header>
     {% block messages %}
     {% if messages %}
@@ -53,7 +57,24 @@
     {% endif %}
     {% endblock messages %}
 
-    {% block content %}
-    {% endblock content %}
+    <main>
+      {% block content %}
+      {% endblock content %}
+    </main>
+    <footer>
+      <div class="inner">
+        <a class="logo" href="{% url 'buggy:bug_list' %}">Buggy</a>
+        {% comment %}
+        Placeholders for footer links
+        <br>
+        <span>&mdash;</span>
+        <ul>
+          <li><a>Markdown Help &rarr;</a></li>
+          <li><a>Buggy Help &rarr;</a></li>
+          <li><a>Interesting Queries &rarr;</a></li>
+        </ul>
+      </div>
+        {% endcomment %}
+    </footer>
   </body>
 </html>

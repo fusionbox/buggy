@@ -1,0 +1,30 @@
+a {
+  text-decoration: none;
+  font-weight: 700;
+  color: $colorPrimary;
+  transition: color .2s ease;
+
+  &:visited {
+    color: $colorPrimary;
+  }
+
+  &:hover,
+  &:focus {
+    color: $linkHoverColor;
+  }
+
+  &:not(.button) {
+    @include betterUnderline;
+    font-family: $fontMonospace;
+
+    &:hover,
+    &:focus {
+      color: $linkHoverColor;
+    }
+  }
+
+  &.silent {
+    box-shadow: none;
+    text-shadow: none;
+  }
+}

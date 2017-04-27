@@ -1,0 +1,39 @@
+time {
+
+  &.absoluteDate {
+    font-family: $fontMonospace;
+  }
+
+  &.relativeDate {
+    font-family: inherit;
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: inherit;
+  font-weight: 700;
+  text-rendering: optimizeLegibility;
+}
+
+p {
+  font-size: 1rem;
+  font-weight: 400;
+  margin-top: 0;
+}
+
+pre {
+  font-family: $fontMonospace;
+  @include inset;
+  padding: 1rem;
+}
+
+code {
+  background-color: $offWhiteDark;
+}
+
+::selection {
+  background-color: $purple;
+  color: $white;
+  text-shadow: none;
+  box-shadow: none;
+}

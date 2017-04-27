@@ -1,13 +1,14 @@
 {% extends "buggy/base.html" %}
 
 {% block content %}
-<form method="post">
+<form method="post" class="loginForm">
+  <h1>Log In</h1>
   {% csrf_token %}
   {{ form.non_field_errors }}
   {% for field in form %}
   {% include 'buggy/_formfield.html' %}
   {% endfor %}
-  <p><a href="{% url "password_reset" %}">Forgot password?</a></p>
+  <a class="forgotPassword" href="{% url "password_reset" %}">Forgot password?</a>
   <input type="submit" value="Log In">
 </form>
 {% endblock content %}
