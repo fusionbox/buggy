@@ -122,3 +122,5 @@ jQuery(function($) {
     location.reload();
   });
 });
+
+$.pjax.defaults.timeout = 2500;
