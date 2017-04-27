@@ -1,0 +1,11 @@
+<form method="post" enctype="multipart/form-data">
+  {{ form.non_field_errors }}
+
+  {% include "buggy/_formfield.html" with field=form.comment %}
+  {% include "buggy/_formfield.html" with field=form.priority %}
+  {% include "buggy/_formfield.html" with field=form.assign_to %}
+
+  {% include 'buggy/_form_actions.html' with actions=bulk_actions %}
+
+  {% csrf_token %}
+</form>

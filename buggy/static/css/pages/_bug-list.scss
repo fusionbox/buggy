@@ -6,7 +6,7 @@
   td,
   th {
     padding: .75rem 1rem .5rem 1rem;
-    font-size: .925rem;
+    font-size: 1rem;
 
     &:first-of-type {
       padding-left: 0;
@@ -49,32 +49,15 @@
   }
 }
 
-@keyframes glyph {
-  0% {
-    content: '\25A7';
-    transform: scale(.75);
-  }
-
-  25% {
-    content: '\25A6';
-    opacity: 1;
-  }
-
-  50% {
-    content: '\25A8';
-    transform: scale(1);
-  }
-
-  75% {
-    content: '\25A5';
-    opacity: .75;
-  }
-
-  100% {
-    content: '\25A4';
-    opacity: 1;
-  }
+.filterSectionTitle {
+  grid-column: 1 / 4;
 }
+
+.filterList {
+  list-style: none;
+  padding-left: 0;
+}
+
 
 // Bug list wrapper
 #pjax-container {
@@ -144,6 +127,7 @@
     margin-bottom: .5rem;
 
     a {
+      font-weight: 600;
       box-shadow: none;
       text-shadow: none;
       padding-left: 1.5rem;
@@ -244,6 +228,42 @@
   font-style: italic;
 }
 
+.bugListCheck {
+  position: relative;
+  padding: .4rem 0 0 0;
+
+  th&,
+  td& {
+    width: 15px;
+    padding: 1rem 0 0 0;
+    text-align: center;
+  }
+
+  th& input {
+    position: absolute;
+    top: 15px;
+    left: 0;
+  }
+
+  tr:first-of-type td& input:before {
+    top: 0;
+  }
+
+  td& {
+    padding: 0 0 1rem 0;
+
+    input {
+      margin-top: 0;
+      position: relative;
+
+      &:before {
+        top: 10px;
+      }
+    }
+  }
+}
+
+
 // Bug Table Cells
 .bugListNumber {
 
@@ -256,7 +276,8 @@
 .bugListState {
 
   td& {
-    font-variant: small-caps;
+    text-transform: uppercase;
+    font-size: 80%;
     letter-spacing: .02rem;
     font-weight: 600;
   }
@@ -269,21 +290,22 @@
 
 .bugListCount {
   margin-top: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
   text-align: center;
   position: relative;
 
   span {
     font-weight: 400;
-    letter-spacing: 1px;
-    font-variant: small-caps;
-    text-transform: lowercase;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 80%;
+    font-family: $fontMonospace;
     font-size: 1rem;
-    padding: .5rem 1rem;
+    padding: .5rem 1rem .25rem 1rem;
     background-color: $colorPrimary;
-    border-left: 4px solid $colorPrimaryShade;
     color: $colorBackground;
-    border-bottom: $colorPrimaryShade;
+    border-bottom: 4px solid $colorPrimaryShade;
+    position: relative;
   }
 }
 
@@ -354,11 +376,57 @@
   background-color: transparent;
 }
 
-.filterSectionTitle {
-  grid-column: 1 / 4;
-}
 
-.filterList {
-  list-style: none;
-  padding-left: 0;
+// Bulk Actions
+.offCanvasForm {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  background-color: $colorPrimaryShade;
+  width: 100%;
+  border-top: 4px solid $colorPrimary;
+  box-shadow: 0 -2px 0 2px transparentize($colorPrimary, .9);
+  padding-top: 1rem;
+
+  &__inner {
+    @include inner;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-column-gap: 2rem;
+
+    .comment {
+      max-height: 140px;
+
+      textarea {
+        width: 100%;
+        min-height: 0;
+        max-height: 100px;
+      }
+    }
+
+    .nestedAction {
+      margin-right: 1rem;
+    }
+
+    button,
+    button:hover,
+    label {
+      color: $offWhite;
+    }
+
+    button:hover {
+      opacity: .8;
+    }
+
+    .actions {
+      padding-top: 1rem;
+      grid-column: 1 / 4;
+      justify-content: flex-end;
+      border-top: 0;
+
+      button:last-of-type {
+        margin-right: 0;
+      }
+    }
+  }
 }
