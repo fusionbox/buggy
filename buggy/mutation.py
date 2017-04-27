@@ -255,6 +255,6 @@ class BuggyBugMutator(BugMutator):
 
     @cached_property
     def latest_resolver(self):
-        for action in reversed(self.bug.actions.all()):
+        for action in reversed(self.bug.actions.select_related('setstate', 'user')):
             if hasattr(action, 'setstate') and action.setstate.state in self.RESOLVED_STATES:
                 return action.user
