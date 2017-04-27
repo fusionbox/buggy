@@ -1,52 +1,57 @@
 {% extends "buggy/base.html" %}
+{% load static %}
 
 {% block content %}
 
-<section>
-  <h2>Filters</h2>
-
-  <form data-pjax action="{% url 'buggy:bug_list' %}" method="get">
+<section class="bugFilterGroup__wrap">
+  <form class="bugFilterGroup" data-pjax action="{% url 'buggy:bug_list' %}" method="get" >
     {{ form.non_field_errors }}
-    <fieldset>
-      <h3>General</h3>
-      {% include "buggy/_formfield.html" with field=form.projects %}
+
+    <fieldset class="bugFilterGroup__section">
       {% include "buggy/_formfield.html" with field=form.search %}
+      {% include "buggy/_formfield.html" with field=form.projects %}
       {% include "buggy/_formfield.html" with field=form.created_by %}
       {% include "buggy/_formfield.html" with field=form.assigned_to %}
     </fieldset>
 
-    <fieldset>
+    <fieldset class="bugFilterGroup__section">
       {% include "buggy/_formfield.html" with field=form.state %}
     </fieldset>
 
-    <fieldset>
+    <fieldset class="bugFilterGroup__section">
       {% include "buggy/_formfield.html" with field=form.priority %}
     </fieldset>
-
     <noscript>
+      <fieldset class="bugFilterGroup__section">
         {# The form is normally submitted  by pjax #}
-        <input type="submit" value="Filter">
+        <input class="button bugFilterButton" type="submit" value="Filter">
+      </fieldset>
     </noscript>
   </form>
 
-  <h2>Preset Filters</h2>
-  <ul class="preset-container">
-    <li><a href="{% url 'buggy:bug_list' %}">Current</a></li>
-    <li><a href="{% url 'buggy:bug_list' %}?assigned_to={{ request.user.id }}">Mine</a></li>
-    {% for preset in request.user.presetfilter_set.all %}
-    {% include 'buggy/_presetfilter.html' %}
-    {% endfor %}
-  </ul>
-  <form action="{% url 'buggy:add_preset' %}" method="post" class="add-preset">
+  <div class="presetContainer">
+    <h2>Preset Filters</h2>
+    <ul class="presetFilterList">
+      <li class="presetItem presetLocked"><a href="{% url 'buggy:bug_list' %}"><i class="presetLocked"></i><span>Current</span></a></li>
+      <li class="presetItem presetLocked"><a href="{% url 'buggy:bug_list' %}?assigned_to={{ request.user.id }}"><i class="presetLocked"></i><span>Mine</span></a></li>
+      {% for preset in request.user.presetfilter_set.all %}
+      {% include 'buggy/_presetfilter.html' %}
+      {% endfor %}
+    </ul>
+    <form action="{% url 'buggy:add_preset' %}" method="post" class="add-preset">
       {% csrf_token %}
-      {% include "buggy/_formfield.html" with field=preset_form.name %}
-      <input type="hidden" name="url" value="{{ request.get_full_path }}?{{ request.GET.urlencode }}" id="add-preset-url">
-      <input type="submit" value="Add Preset">
-  </form>
+      <p class="help-text">Create a new preset with the current filter values</p>
+      <div class="addPresetActions">
+        {% include "buggy/_formfield.html" with field=preset_form.name %}
+        <input type="hidden" name="url" value="{{ request.get_full_path }}?{{ request.GET.urlencode }}" id="add-preset-url">
+        <input  class="button button--small" type="submit" value="+">
+      </div>
+    </form>
+  </div>
 </section>
+
 
 <section id="pjax-container">
 {% include 'buggy/_bug_list.html' %}
 </section>
-
 {% endblock %}

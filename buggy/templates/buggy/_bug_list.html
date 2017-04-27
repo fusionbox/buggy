@@ -1,31 +1,66 @@
-{% load buggy_tags %}
+{% load buggy_tags humanize %}
 
-<p>Bugs ({{ bugs|length }})</p>
+<div class="bugListCount"><span>Matching Bugs: {{ bugs|length|intcomma }}</span></div>
 
-<table>
+<table class="bugListTable">
   <thead>
     <tr>
-        <th><a href="{{ sort_links.number }}" data-pjax{% if sort_by == 'number'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>No.</a></th>
-        <th><a href="{{ sort_links.project }}" data-pjax{% if sort_by == 'project'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>Project</a></th>
-      <th><a href="{{ sort_links.bug }}" data-pjax{% if sort_by == 'bug'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>Bug</a></th>
-      <th><a href="{{ sort_links.modified }}" data-pjax{% if sort_by == 'modified'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>Last Mofidied</a></th>
-      <th><a href="{{ sort_links.creator }}" data-pjax{% if sort_by == 'creator'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>Creator</a></th>
-      <th><a href="{{ sort_links.assigned_to }}" data-pjax{% if sort_by == 'assigned_to'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>Assigned To</a></th>
-      <th><a href="{{ sort_links.state }}" data-pjax{% if sort_by == 'state'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>State</a></th>
-      <th><a href="{{ sort_links.priority }}" data-pjax{% if sort_by == 'priority'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>Priority</a></th>
+      <th class="bugListNumber">
+        <a href="{{ sort_links.number }}" data-pjax{% if sort_by == 'number'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>
+          No.
+        </a>
+      </th>
+      <th class="bugListProject">
+        <a href="{{ sort_links.project }}" data-pjax{% if sort_by == 'project'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>
+        Project
+      </a>
+      </th>
+      <th class="bugListBug">
+        <a href="{{ sort_links.bug }}" data-pjax{% if sort_by == 'bug'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>
+          Title
+        </a>
+      </th>
+      <th class="bugListLastModified">
+        <a href="{{ sort_links.modified }}" data-pjax{% if sort_by == 'modified'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>
+          Last Modified
+       </a>
+      </th>
+      <th class="bugListCreator">
+        <a href="{{ sort_links.creator }}" data-pjax{% if sort_by == 'creator'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>
+          Creator
+      </a>
+      </th>
+
+      <th class="bugListAssignedTo">
+        <a href="{{ sort_links.assigned_to }}" data-pjax{% if sort_by == 'assigned_to'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>
+          Assigned To
+       </a>
+      </th>
+
+      <th class="bugListState">
+        <a href="{{ sort_links.state }}" data-pjax{% if sort_by == 'state'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>
+          State
+        </a>
+      </th>
+
+      <th class="bugListPriority">
+        <a href="{{ sort_links.priority }}" data-pjax{% if sort_by == 'priority'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>
+          Priority
+        </a>
+      </th>
     </tr>
   </thead>
   <tbody>
     {% for bug in bugs %}
     <tr>
-      <td>{{ bug.number }}</td>
-      <td>{{ bug.project }}</td>
-      <td><a href="{{ bug.get_absolute_url }}">{{ bug.title }}</a></td>
-      <td>{{ bug.modified_at|absolutedate }}</td>
-      <td>{{ bug.created_by.get_short_name }}</td>
-      <td>{{ bug.assigned_to.get_short_name }}</td>
-      <td>{{ bug.state.label }}</td>
-      <td>{{ bug.priority.label }}</td>
+      <td class="bugListNumber">{{ bug.number }}</td>
+      <td class="bugListProject">{{ bug.project }}</td>
+      <td class="bugListBug"><a href="{{ bug.get_absolute_url }}">{{ bug.title }}</a></td>
+      <td class="bugListLastModified">{{ bug.modified_at|absolutedate }}</td>
+      <td class="bugListCreator">{{ bug.created_by.get_short_name }}</td>
+      <td class="bugListAssignedTo">{{ bug.assigned_to.get_short_name }}</td>
+      <td class="bugListState">{{ bug.state.label }}</td>
+      <td class="bugListPriority">{{ bug.priority.label }}</td>
     </tr>
     {% endfor %}
   </tbody>

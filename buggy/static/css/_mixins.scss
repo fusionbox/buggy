@@ -1,0 +1,33 @@
+@mixin inner {
+  max-width: $global-width;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@mixin topStroke($borderWidth: 5px) {
+  border-top: ($borderWidth) solid currentColor;
+}
+
+@mixin button($color: $colorPrimary) {
+  border: 2px solid currentColor;
+  transition: color .2s ease;
+  color: $color;
+  padding: .4rem 1rem;
+  box-shadow: none;
+  font-size: 1rem;
+  font-weight: 700;
+  background: transparent;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  font-family: $fontMonospace;
+}
+
+@mixin betterUnderline {
+  box-shadow: inset 0 -1px 0 0 $colorBackground, inset 0 -2px 0 0 currentColor;
+  text-shadow: 1px 1px 0 $colorBackground, -1px 1px 0 $colorBackground, 2px 0 0 $colorBackground, -2px 0 0 $colorBackground;
+}
+
+@mixin inset {
+  background-color: $offWhiteDark;
+  border: 4px solid $offWhiteXDark;
+}

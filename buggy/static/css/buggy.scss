@@ -1,0 +1,55 @@
+@import 'variables',
+        'mixins',
+        'normalize',
+        'links',
+        'typography',
+        'forms',
+        'buttons',
+        'tables',
+        'alerts',
+        'sections/header',
+        'sections/footer',
+        'pages/bug-list',
+        'pages/bug-detail',
+        'pages/bug-form',
+        'pages/login-form';
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: $fontPrimary;
+  font-size: .825rem;
+  line-height: 1.4;
+  color: $colorPrimary;
+  background-color: $colorBackground;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  @include inner;
+  min-height: 60vh;
+  margin-bottom: 4rem;
+}
+
+.messages {
+  @include inner;
+}
+
+main,
+header {
+  padding: 0 4rem;
+}
+
+footer {
+  min-height: 35vh;
+}
+
+.inner {
+  @include inner;
+}

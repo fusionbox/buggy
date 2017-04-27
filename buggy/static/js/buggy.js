@@ -123,4 +123,4 @@ jQuery(function($) {
   });
 });
 
-$.pjax.defaults.timeout = 2500;
+jQuery.pjax.defaults.timeout = 2500;

@@ -21,7 +21,12 @@ class FilterForm(forms.Form):
         required=False,
         queryset=Project.objects.filter(is_active=True),
     )
-    search = forms.CharField(required=False)
+    search = forms.CharField(
+        required=False,
+        widget=forms.TextInput(
+            attrs={'placeholder': 'Enter a search term'}
+        ),
+    )
     created_by = forms.ModelChoiceField(
         required=False,
         empty_label='Anyone',
@@ -103,6 +108,12 @@ class PresetFilterForm(forms.ModelForm):
     class Meta:
         model = PresetFilter
         fields = ['user', 'name', 'url']
+        widgets = {
+            'name': forms.TextInput(
+                attrs={'placeholder': 'Preset Name'}
+            ),
+        }
+
 
 
 class EditForm(forms.Form):

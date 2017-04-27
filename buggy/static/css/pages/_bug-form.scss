@@ -1,0 +1,86 @@
+.bugForm {
+  @include inset;
+  padding: 2rem;
+  max-width: 64rem;
+}
+
+#id_project,
+.bugForm .title {
+  max-width: 32rem;
+}
+
+
+.bugFormActionBar {
+  display: flex;
+
+  input {
+    border: 0;
+  }
+
+  .formField {
+    margin-right: 2rem;
+  }
+
+  input,
+  select {
+    flex: 1 1 auto;
+  }
+
+  .attachments,
+  .priority,
+  .assign_to {
+    @include topStroke(4px);
+    padding-top: 1rem;
+    flex: 1 1 auto;
+  }
+
+  .assign_to {
+    margin-right: 0;
+  }
+}
+
+.actions {
+  @include topStroke(2px);
+  display: flex;
+  padding-top: 2rem;
+
+  button {
+    margin-right: 1rem;
+    font-size: .875rem;
+  }
+}
+
+.subActions {
+  display: flex;
+
+  &:last-of-type {
+    margin-right: 0;
+  }
+}
+
+.commentMarkdown {
+  display: flex;
+  margin-bottom: 2rem;
+
+  textarea {
+    font-size: 1.2rem;
+    font-family: $fontMonospace;
+    width: 100%;
+    resize: vertical;
+    border: 2px solid $colorPrimary;
+  }
+}
+
+.previewTarget {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid currentColor;
+  margin-left: 2rem;
+  margin-top: 1.8rem;
+  margin-bottom: 4.5rem;
+}
+
+.bugCommentEditor,
+.previewMarkdown {
+  flex: 1 0 50%;
+}

@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.postgres',
-
+    'django.contrib.humanize',
     'django_extensions',
     'authtools',
     'compressor',

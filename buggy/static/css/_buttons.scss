@@ -1,0 +1,38 @@
+button,
+a.button {
+  display: inline-block;
+  transition: all .2s ease;
+  font-family: $fontMonospace;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  @include button;
+
+  &:hover {
+    border: 2px solid currentColor;
+    color: $linkHoverColor;
+  }
+
+  &--small {
+    font-size: 1rem;
+  }
+
+  &.open,
+  &[value='resolved-fixed'],
+  &[value='resolved-duplicate'] {
+    color: $blue;
+
+    &:hover {
+      color: $blueBright;
+    }
+  }
+
+  &[value='resolved-impossible'],
+  &[value='resolved-unreproducible'],
+  &[value='resolved-notabug'] {
+    color: $yellow;
+  }
+
+  &.cancel {
+    color: $red;
+  }
+}
