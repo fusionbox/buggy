@@ -1,6 +1,5 @@
 input,
 select {
-  -webkit-appearance: none;
   margin-bottom: .5rem;
   padding: .5rem;
   font-size: 1rem;
@@ -24,6 +23,8 @@ select {
 }
 
 input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
   background-color: $white;
   color: $colorActivePrimary;
 
@@ -47,6 +48,7 @@ input {
     margin-bottom: 2rem;
     padding-left: 2rem;
     border: 0;
+    max-width: 15px;
 
     &:hover {
       cursor: pointer;
@@ -72,10 +74,6 @@ input {
     &:checked:before {
       z-index: 2;
       background-color: $colorPrimary;
-
-      &:hover {
-
-      }
     }
 
     &:hover:checked:before {
@@ -93,7 +91,16 @@ input {
   }
 }
 
+select {
+  -webkit-appearance: none;
+  padding-right: 2rem;
+  min-height: 40px;
+  padding-right: 2rem;
+  min-height: 40px;
+}
+
 textarea {
+  font-family: $fontPrimary;
   border: 2px solid $colorPrimary;
   background: $white;
   padding: 1rem;
@@ -121,14 +128,10 @@ fieldset {
   margin-right: 0;
 }
 
-select {
-  padding-right: 2rem;
-  min-height: 40px;
-}
-
 select,
 span.select2-container {
   -webkit-appearance: none;
+  -moz-appearance: none;
   width: 100%;
   margin-bottom: 1rem;
   border-radius: 0;
