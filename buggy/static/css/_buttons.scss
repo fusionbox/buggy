@@ -13,6 +13,7 @@ a.button {
   }
 
   &[disabled] {
+    cursor: initial;
     opacity: .65;
   }
 
