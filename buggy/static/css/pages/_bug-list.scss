@@ -433,7 +433,7 @@
       color: $offWhite;
     }
 
-    button:hover {
+    button:not([disabled]):hover {
       opacity: .8;
     }
 
