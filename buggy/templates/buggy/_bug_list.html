@@ -72,7 +72,7 @@
         <td class="bugListLastModified">{{ bug.modified_at|absolutedate }}</td>
         <td class="bugListCreator">{{ bug.created_by.get_short_name }}</td>
         <td class="bugListAssignedTo">{{ bug.assigned_to.get_short_name }}</td>
-        <td class="bugListState">{{ bug.state.label }}</td>
+        <td class="bugListState"><span>{{ bug.state.label }}</span></td>
         <td class="bugListPriority">{{ bug.priority.label }}</td>
       </tr>
       {% endfor %}

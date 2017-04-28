@@ -3,6 +3,7 @@ footer {
   background-color: darken($colorPrimary, 30%);
   color: $white;
   margin-top: auto;
+  background-image: $gradientPurpleBright;
 
   small {
     text-transform: uppercase;

@@ -64,7 +64,6 @@
 
   textarea {
     font-size: 1.2rem;
-    font-family: $fontMonospace;
     width: 100%;
     resize: vertical;
     border: 2px solid $colorPrimary;
@@ -72,11 +71,13 @@
 }
 
 .previewTarget {
+  font-size: 1.2rem;
+  background-color: $white;
   width: 100%;
   padding: 1rem;
   border: 2px solid currentColor;
   margin-left: 2rem;
-  margin-top: 1.8rem;
+  margin-top: 2rem;
   margin-bottom: 4.5rem;
 }
 

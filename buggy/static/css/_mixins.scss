@@ -4,6 +4,13 @@
   margin-right: auto;
 }
 
+@mixin noSelection {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 @mixin topStroke($borderWidth: 5px) {
   border-top: ($borderWidth) solid currentColor;
 }

@@ -1,23 +1,26 @@
 $white: #fff;
-$offWhite: #fcf9f4;
-$offWhiteXDark: darken($offWhite, 6%);
-$offWhiteDark: darken($offWhite, 3%);
+$offWhite: #fffdf8;
+$offWhiteDark: #fefbf7;
+$offWhiteXDark: #f5f2eb;
 $greyLight: #9a9a9a;
 
 $greyDark: #0d0f05;
 $greyXLight: #fafafa;
 $blueBright: #00f;
-$green: #06d9a3;
+$green: #00c593;
 $blue: #1e90ff;
 $purple: #4a4cac;
 $red: #c03410;
 $yellow: #e37a01;
+
 
 $eggplant: #4019c0;
 $global-width: 90rem;
 $errorColor: $red;
 $warningColor: $yellow;
 $successColor: $green;
+
+$gradientPurpleBright: linear-gradient(40deg, $eggplant 0%, #560BB0 95%);
 
 $fontPrimary: 'Work Sans', sans-serif;
 $fontMonospace: 'Roboto Mono', monospace;

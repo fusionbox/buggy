@@ -19,12 +19,13 @@
       data-item='{"id": {{ bug.number|json|force_escape }}, "name": {{ bug.title|json|force_escape }}}'
       data-group='{"id": {{ bug.project.id|json|force_escape }}, "name": {{ bug.project.name|json|force_escape }}}'
     ></div>
+    <span class="bugNumber">#{{ bug.number }}</span> /
     <a class="bugDetailProject" href="{{ bug.project.get_absolute_url }}">
       {{ bug.project }}
     </a>
   </h2>
   <h1 class="bugMetadataTitle">
-    <span class="bugNumber">#{{ bug.number }}</span>: {{ bug.title }}
+    {{ bug.title }}
   </h1>
 </section>
 

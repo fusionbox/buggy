@@ -400,7 +400,6 @@
   background-color: transparent;
 }
 
-
 // Bulk Actions
 .offCanvasForm {
   position: fixed;
@@ -422,6 +421,7 @@
 
   &__inner {
     @include inner;
+    padding: 1rem;
     display: grid;
     grid-template-columns: 2fr 1fr;
     grid-column-gap: 2rem;

@@ -1,9 +1,13 @@
 // Error state styles
 .errorlist {
-  background-color: $errorColor;
   color: $white;
   text-align: center;
   margin-bottom: 3rem;
+
+  li {
+    background-color: $errorColor;
+    line-height: 1;
+  }
 }
 
 .errorlist,
@@ -12,10 +16,16 @@
   padding-left: 0;
 
   li {
-    padding: .75rem;
+    padding: .75rem 1.25rem .5rem .75rem;
     font-weight: 300;
     letter-spacing: .4px;
     display: inline-block;
+
+    &:before {
+      display: inline-block;
+      margin-right: .4rem;
+      vertical-align: -3px;
+    }
   }
 
   .warning,
@@ -24,17 +34,11 @@
     color: $white;
     font-weight: 300;
     font-size: 1.1rem;
-
-    &:before {
-      display: inline-block;
-      margin-right: .4rem;
-      vertical-align: -2px;
-    }
   }
 
   .error {
     background-color: $errorColor;
-    border-left: 4px solid darken($errorColor, 5%);
+    border-bottom: 4px solid darken($errorColor, 5%);
 
     &:before {
       content: url('../img/delete-reverse.svg');
@@ -43,7 +47,7 @@
 
   .warning {
     background-color: $warningColor;
-    border-left: 4px solid darken($warningColor, 5%);
+    border-bottom: 4px solid darken($warningColor, 5%);
 
     &:before {
       content: url('../img/alert.svg');
@@ -52,11 +56,10 @@
 
   .success {
     background-color: $successColor;
-    border-left: 4px solid darken($successColor, 5%);
+    border-bottom: 4px solid darken($successColor, 5%);
 
     &:before {
       content: url('../img/check.svg');
-
     }
   }
 }
@@ -67,7 +70,7 @@
   margin-right: auto;
 
   li {
-    border-left: 4px solid darken($errorColor, 5%);
+    border-bottom: 4px solid darken($errorColor, 5%);
 
     &:before {
       display: inline-block;
