@@ -11,6 +11,7 @@
     <thead>
       <tr>
         <th class="bugListCheck">
+          <label for="check_all_bugs">Check all bugs</label>
           <input id="check_all_bugs" type="checkbox">
         </th>
         <th class="bugListNumber">
@@ -61,7 +62,10 @@
     <tbody>
       {% for bug in bugs %}
       <tr data-number="{{ bug.number }}">
-        <td class="bugListCheck"><input type="checkbox" name="bugs" value="{{ bug.id }}"></td>
+        <td class="bugListCheck">
+          <label for="bulk-select-checkbox-{{bug.id}}">Select {{ bug.number }}</label>
+          <input type="checkbox" name="bugs" value="{{ bug.id }}" id="bulk-select-checkbox-{{bug.id}}">
+        </td>
         <td class="bugListNumber">{{ bug.number }}</td>
         <td class="bugListProject">{{ bug.project }}</td>
         <td class="bugListBug"><a href="{{ bug.get_absolute_url }}">{{ bug.title }}</a></td>

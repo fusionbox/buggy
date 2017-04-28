@@ -239,10 +239,19 @@
     text-align: center;
   }
 
-  th& input {
-    position: absolute;
-    top: 15px;
-    left: 0;
+  th& {
+    label {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+    }
+
+    input {
+      position: absolute;
+      top: 15px;
+      left: 0;
+    }
   }
 
   tr:first-of-type td& input:before {
@@ -251,6 +260,13 @@
 
   td& {
     padding: 0 0 1rem 0;
+
+    label {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+    }
 
     input {
       margin-top: 0;
