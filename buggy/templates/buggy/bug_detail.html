@@ -1,11 +1,10 @@
 {% extends "buggy/base.html" %}
 
-{% load buggy_tags thumbnail argonauts absoluteuri cache %}
+{% load buggy_tags thumbnail argonauts absoluteuri %}
 
 {% block title %}{{ block.super }} - {{ bug.title }}{% endblock %}
 
 {% block content %}
-{% cache 31536000 bug_detail bug.id bug.modified_at %}
 
 <script>
   window._harvestPlatformConfig = {
@@ -67,8 +66,6 @@
     {% endif %}
   </section>
 {% endfor %}
-
-{% endcache %}
 
 {% include "buggy/_bug_form.html" %}
 
