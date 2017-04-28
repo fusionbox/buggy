@@ -1,9 +1,5 @@
-import functools
-import operator
-
 from django import forms
 from django.contrib.auth import get_user_model
-from django.db.models import Q
 
 from .models import Project, PresetFilter
 from .enums import State, Priority
@@ -78,14 +74,12 @@ class FilterForm(forms.Form):
         if cd['priority']:
             qs = qs.filter(priority__in=cd['priority'])
         if cd['state']:
-            conds = []
-            for state in cd['state']:
-                conds.extend(
-                    Q(state=state_enum)
-                    for state_enum in State
-                    if state_enum.value == state or state_enum.value.startswith('{}-'.format(state))
-                )
-            qs = qs.filter(functools.reduce(operator.or_, conds))
+            qs = qs.filter(state__in={
+                state_enum
+                for state_enum in State
+                for state in cd['state']
+                if state_enum.value == state or state_enum.value.startswith('{}-'.format(state))
+            })
         if cd['search']:
             # We use extra here instead of the builtin __search filter because
             # it's extremely inefficient when used with .annotate() (we need to
