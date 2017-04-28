@@ -387,12 +387,30 @@
   border-top: 4px solid $colorPrimary;
   box-shadow: 0 -2px 0 2px transparentize($colorPrimary, .9);
   padding-top: 1rem;
+  padding-bottom: 2rem;
+  transform: translateY(100%);
+  transition: transform .2s ease-out;
+  z-index: 2;
+
+  &.active {
+    transform: translateY(0);
+  }
 
   &__inner {
     @include inner;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr;
     grid-column-gap: 2rem;
+
+    > p:first-of-type {
+      grid-column: 1 / end;
+      border-bottom: 1px solid $colorPrimary;
+      text-transform: uppercase;
+      font-family: $fontMonospace;
+      letter-spacing: 2px;
+      font-weight: 700;
+      padding-bottom: 1rem;
+    }
 
     .comment {
       max-height: 140px;
@@ -410,7 +428,8 @@
 
     button,
     button:hover,
-    label {
+    label,
+    p {
       color: $offWhite;
     }
 
@@ -419,9 +438,10 @@
     }
 
     .actions {
+      grid-row: 3;
       padding-top: 1rem;
-      grid-column: 1 / 4;
-      justify-content: flex-end;
+      grid-column: 1 / end;
+      justify-content: center;
       border-top: 0;
 
       button:last-of-type {

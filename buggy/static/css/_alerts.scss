@@ -1,9 +1,4 @@
 // Error state styles
-.errorlist,
-.messages {
-
-}
-
 .errorlist {
   background-color: $errorColor;
   color: $white;
@@ -17,9 +12,10 @@
   padding-left: 0;
 
   li {
-    padding: .5rem;
+    padding: .75rem;
     font-weight: 300;
     letter-spacing: .4px;
+    display: inline-block;
   }
 
   .warning,
@@ -27,12 +23,12 @@
   .success {
     color: $white;
     font-weight: 300;
-    font-size: 1.4rem;
+    font-size: 1.1rem;
 
     &:before {
       display: inline-block;
       margin-right: .4rem;
-      vertical-align: 0;
+      vertical-align: -2px;
     }
   }
 
@@ -66,7 +62,7 @@
 }
 
 .errorlist {
-  max-width: 24rem;
+  max-width: 34rem;
   margin-left: auto;
   margin-right: auto;
 
@@ -90,6 +86,6 @@
   li {
     margin-left: auto;
     margin-right: auto;
-    max-width: 28rem;
+    max-width: 34rem;
   }
 }
