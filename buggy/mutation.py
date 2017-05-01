@@ -118,7 +118,7 @@ class BuggyBugMutator(BugMutator):
             'label': "Close",
             'help_text': (
                 "This bug has been resolved and verified, it is no longer an issue. "
-                "The bug will no longer be in the default view on the homepage.",
+                "The bug will no longer be in the default view on the homepage."
             )
         }
 
