@@ -159,10 +159,10 @@ jQuery(function($) {
     );
     var actionLists = bugNumbers.map(function(x) { return window.buggyData.bugActions[x]; });
     var allowedActions = intersection(actionLists);
-    $('button[name=action]').each(function(i, e) {
+    $('.offCanvasForm button[name=action]').each(function(i, e) {
       $(e).prop('disabled', allowedActions.indexOf(e.value) < 0);
     });
-    $('.nestedAction > button').each(function(i, e) {
+    $('.offCanvasForm .nestedAction > button').each(function(i, e) {
       var hasActiveChildren = $(e).siblings('.subActions').find('button[name=action]:enabled').length > 0;
       $(e).prop('disabled', !hasActiveChildren);
     });
