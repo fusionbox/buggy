@@ -75,7 +75,6 @@ jQuery(function($) {
   });
 
   // Pjax
-  $.pjax.defaults.scrollTo = false;
   var pjaxRequestPending = false;
   var pjaxRequestCanceled = false;
 
@@ -181,4 +180,5 @@ jQuery(function($) {
   setActiveBulkActions();
 });
 
+jQuery.pjax.defaults.scrollTo = false;
 jQuery.pjax.defaults.timeout = 2500;
