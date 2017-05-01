@@ -12,6 +12,11 @@ a.button {
     color: $linkHoverColor;
   }
 
+  &[disabled] {
+    cursor: initial;
+    opacity: .65;
+  }
+
   &--small {
     font-size: 1rem;
   }

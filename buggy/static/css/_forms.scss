@@ -123,6 +123,7 @@ fieldset {
 
 select {
   padding-right: 2rem;
+  min-height: 40px;
 }
 
 select,
@@ -147,10 +148,15 @@ select,
   background-color: $white;
 }
 
+.select2-container--default li.select2-results__option--highlighted[aria-selected] {
+  background-color: $colorPrimaryShade;
+}
+
 // Select2-Specific Styles
 .select2-container--default {
   max-width: 500px;
 }
+
 .select2-selection__rendered {
   margin-top: 5px !important;
   color: $colorPrimary !important;

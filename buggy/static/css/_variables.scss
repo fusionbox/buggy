@@ -22,7 +22,7 @@ $successColor: $green;
 $fontPrimary: 'Work Sans', sans-serif;
 $fontMonospace: 'Roboto Mono', monospace;
 $colorPrimary: $eggplant;
-$colorPrimaryShade: darken($eggplant, 15%);
+$colorPrimaryShade: darken($colorPrimary, 15%);
 $colorPrimaryTint:  lighten($colorPrimary, 25%);
 $colorBackground: $offWhite;
 $colorActivePrimary: $colorPrimaryTint;

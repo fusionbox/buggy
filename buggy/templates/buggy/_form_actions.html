@@ -1,0 +1,21 @@
+{{ form.action.errors }}
+<div class="actions">
+    {% for action in actions %}
+    {% if action.sub_actions %}
+    <div class="nestedAction">
+        <button class="open" value="{{ action.action }}" title="{{ action.help_text }}">
+            {{ action.label }}
+        </button>
+        <div class="subActions">
+            {% for action in action.sub_actions %}
+            {% include "buggy/_action_button.html" %}
+            {% endfor %}
+            <button class="cancel">Cancel</button>
+        </div>
+    </div>
+    {% else %}
+    {% include "buggy/_action_button.html" %}
+    {% endif %}
+    {% endfor %}
+</div>
+

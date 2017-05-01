@@ -109,7 +109,6 @@ class PresetFilterForm(forms.ModelForm):
         }
 
 
-
 class EditForm(forms.Form):
     comment = forms.CharField(widget=forms.Textarea, required=False)
     priority = forms.TypedChoiceField(
@@ -130,3 +129,24 @@ class CreateForm(EditForm):
     comment = forms.CharField(widget=forms.Textarea)
     project = forms.ModelChoiceField(queryset=Project.objects.filter(is_active=True))
     title = forms.CharField(max_length=100)
+
+
+class BulkActionForm(EditForm):
+    attachments = None
+
+    def __init__(self, *args, **kwargs):
+        bug_queryset = kwargs.pop('queryset')
+        self.bug_actions = kwargs.pop('bug_actions')
+        super().__init__(*args, **kwargs)
+        self.fields['bugs'] = forms.ModelMultipleChoiceField(
+            queryset=bug_queryset, required=True
+        )
+
+    def clean(self):
+        super().clean()
+        allowed_actions = functools.reduce(
+            operator.and_,
+            (set(self.bug_actions[bug.number]) for bug in self.cleaned_data['bugs']),
+        )
+        if self.cleaned_data['action'] not in allowed_actions:
+            raise forms.ValidationError("Invalid action for the selected bugs.")

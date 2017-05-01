@@ -1,67 +1,88 @@
-{% load buggy_tags humanize %}
+{% load argonauts buggy_tags humanize %}
+
+<script type="text/javascript">
+  window.buggyData = {'bugActions' : {{ bulk_action_form.bug_actions|json }}};
+</script>
 
 <div class="bugListCount"><span>Matching Bugs: {{ bugs|length|intcomma }}</span></div>
 
-<table class="bugListTable">
-  <thead>
-    <tr>
-      <th class="bugListNumber">
-        <a href="{{ sort_links.number }}" data-pjax{% if sort_by == 'number'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>
-          No.
-        </a>
-      </th>
-      <th class="bugListProject">
-        <a href="{{ sort_links.project }}" data-pjax{% if sort_by == 'project'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>
-        Project
-      </a>
-      </th>
-      <th class="bugListBug">
-        <a href="{{ sort_links.bug }}" data-pjax{% if sort_by == 'bug'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>
-          Title
-        </a>
-      </th>
-      <th class="bugListLastModified">
-        <a href="{{ sort_links.modified }}" data-pjax{% if sort_by == 'modified'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>
-          Last Modified
-       </a>
-      </th>
-      <th class="bugListCreator">
-        <a href="{{ sort_links.creator }}" data-pjax{% if sort_by == 'creator'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>
-          Creator
-      </a>
-      </th>
+<form method="post">
+  <table class="bugListTable">
+    <thead>
+      <tr>
+        <th class="bugListCheck">
+          <label for="check_all_bugs">Check all bugs</label>
+          <input id="check_all_bugs" type="checkbox">
+        </th>
+        <th class="bugListNumber">
+          <a href="{{ sort_links.number }}" data-pjax{% if sort_by == 'number'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>
+            No.
+          </a>
+        </th>
+        <th class="bugListProject">
+          <a href="{{ sort_links.project }}" data-pjax{% if sort_by == 'project'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>
+            Project
+          </a>
+        </th>
+        <th class="bugListBug">
+          <a href="{{ sort_links.bug }}" data-pjax{% if sort_by == 'bug'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>
+            Title
+          </a>
+        </th>
+        <th class="bugListLastModified">
+          <a href="{{ sort_links.modified }}" data-pjax{% if sort_by == 'modified'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>
+            Last Modified
+          </a>
+        </th>
+        <th class="bugListCreator">
+          <a href="{{ sort_links.creator }}" data-pjax{% if sort_by == 'creator'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>
+            Creator
+          </a>
+        </th>
 
-      <th class="bugListAssignedTo">
-        <a href="{{ sort_links.assigned_to }}" data-pjax{% if sort_by == 'assigned_to'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>
-          Assigned To
-       </a>
-      </th>
+        <th class="bugListAssignedTo">
+          <a href="{{ sort_links.assigned_to }}" data-pjax{% if sort_by == 'assigned_to'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>
+            Assigned To
+          </a>
+        </th>
 
-      <th class="bugListState">
-        <a href="{{ sort_links.state }}" data-pjax{% if sort_by == 'state'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>
-          State
-        </a>
-      </th>
+        <th class="bugListState">
+          <a href="{{ sort_links.state }}" data-pjax{% if sort_by == 'state'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>
+            State
+          </a>
+        </th>
 
-      <th class="bugListPriority">
-        <a href="{{ sort_links.priority }}" data-pjax{% if sort_by == 'priority'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>
-          Priority
-        </a>
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for bug in bugs %}
-    <tr>
-      <td class="bugListNumber">{{ bug.number }}</td>
-      <td class="bugListProject">{{ bug.project }}</td>
-      <td class="bugListBug"><a href="{{ bug.get_absolute_url }}">{{ bug.title }}</a></td>
-      <td class="bugListLastModified">{{ bug.modified_at|absolutedate }}</td>
-      <td class="bugListCreator">{{ bug.created_by.get_short_name }}</td>
-      <td class="bugListAssignedTo">{{ bug.assigned_to.get_short_name }}</td>
-      <td class="bugListState">{{ bug.state.label }}</td>
-      <td class="bugListPriority">{{ bug.priority.label }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+        <th class="bugListPriority">
+          <a href="{{ sort_links.priority }}" data-pjax{% if sort_by == 'priority'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>
+            Priority
+          </a>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for bug in bugs %}
+      <tr data-number="{{ bug.number }}">
+        <td class="bugListCheck">
+          <label for="bulk-select-checkbox-{{bug.id}}">Select {{ bug.number }}</label>
+          <input type="checkbox" name="bugs" value="{{ bug.id }}" id="bulk-select-checkbox-{{bug.id}}">
+        </td>
+        <td class="bugListNumber">{{ bug.number }}</td>
+        <td class="bugListProject">{{ bug.project }}</td>
+        <td class="bugListBug"><a href="{{ bug.get_absolute_url }}">{{ bug.title }}</a></td>
+        <td class="bugListLastModified">{{ bug.modified_at|absolutedate }}</td>
+        <td class="bugListCreator">{{ bug.created_by.get_short_name }}</td>
+        <td class="bugListAssignedTo">{{ bug.assigned_to.get_short_name }}</td>
+        <td class="bugListState">{{ bug.state.label }}</td>
+        <td class="bugListPriority">{{ bug.priority.label }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="offCanvasForm">
+    <div class="offCanvasForm__inner">
+      <p id="selected-count">No bugs selected.</p>
+      {% include "buggy/_bulk_action_form.html" with form=bulk_action_form %}
+    </div>
+  </div>
+</form>

@@ -11,7 +11,7 @@ from django.utils.functional import cached_property
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.conf import settings
-from django.template.defaultfilters import capfirst
+from django.template.defaultfilters import capfirst, pluralize
 
 from .models import Bug, Action, Comment
 from .forms import FilterForm, PresetFilterForm
@@ -34,6 +34,7 @@ class BugListView(LoginRequiredMixin, ListView):
         'priority': 'priority',
     }
 
+    mutator_class = BuggyBugMutator
     queryset = Bug.objects.select_related(
         'project', 'created_by', 'assigned_to'
     ).order_by(
@@ -52,9 +53,58 @@ class BugListView(LoginRequiredMixin, ListView):
     def get_form(self):
         return self.form_class(**self.get_form_kwargs())
 
+    def get_bulk_action_form_kwargs(self):
+        kwargs = {
+            'queryset': self.object_list,
+            'bug_actions': self.get_bug_actions(),
+        }
+        if self.request.POST:
+            kwargs['data'] = self.request.POST
+        return kwargs
+
+    def get_bulk_action_form(self):
+        form_class = self.mutator_class.get_bulk_action_form_class()
+        return form_class(**self.get_bulk_action_form_kwargs())
+
     def get(self, *args, **kwargs):
         self.form = self.get_form()
         return super().get(*args, **kwargs)
+
+    def post(self, *args, **kwargs):
+        self.form = self.get_form()
+        self.object_list = self.get_queryset()
+        bulk_action_form = self.get_bulk_action_form()
+        errors = None
+        if bulk_action_form.is_valid():
+            try:
+                with transaction.atomic():
+                    for bug in bulk_action_form.cleaned_data['bugs']:
+                        state_machine = self.mutator_class(self.request.user, bug)
+                        state_machine.process_action(bulk_action_form.cleaned_data)
+            except ValidationError as e:
+                errors = e
+        else:
+            errors = sum(bulk_action_form.errors.values(), [])
+
+        if errors:
+            for error in errors:
+                messages.error(self.request, 'Bulk Action Failed: {}'.format(error))
+        else:
+            bug_count = len(bulk_action_form.cleaned_data['bugs'])
+            messages.success(
+                self.request,
+                'Success: {} bug{} updated'.format(bug_count, pluralize(bug_count)),
+            )
+
+        return HttpResponseRedirect(self.request.get_full_path())
+
+    def get_bug_actions(self):
+        bug_actions = {}
+        for bug in self.object_list:
+            mutator = self.mutator_class(self.request.user, bug)
+            action_choices = mutator.action_choices(mutator.get_actions())
+            bug_actions[bug.number] = [x[0] for x in action_choices]
+        return bug_actions
 
     def get_sort_links(self):
         sort_links = {}
@@ -74,7 +124,10 @@ class BugListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        if 'bulk_action_form' not in kwargs:
+            context['bulk_action_form'] = self.get_bulk_action_form()
         context['form'] = self.form
+        context['bulk_actions'] = self.mutator_class.get_bulk_actions()
         context['preset_form'] = PresetFilterForm(label_suffix='')
         context['sort_links'] = self.get_sort_links()
         context['sort_by'], context['sort_desc'] = self.sort_type()

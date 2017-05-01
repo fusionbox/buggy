@@ -47,7 +47,7 @@ def process_commit(commit):
             )
             if not any(commit['id'] in c for c in past_comments):
                 mutator = BuggyBugMutator(bug=bug, user=user)
-                actions = {a[0] for a in mutator.action_choices()}
+                actions = {a[0] for a in mutator.action_choices(mutator.get_actions())}
 
                 comment = "{} {} the bug in commit `{}`:\n\n{}".format(
                     user.get_short_name(),

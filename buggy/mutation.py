@@ -1,8 +1,8 @@
 from django.core.exceptions import ValidationError
 from django import forms
-from django.utils.functional import cached_property
+from django.utils.functional import cached_property, lazy
 
-from .forms import CreateForm, EditForm
+from .forms import CreateForm, EditForm, BulkActionForm
 from .models import Action
 from .enums import State
 
@@ -15,30 +15,115 @@ class BugMutator(object):
     def get_actions(self):
         raise NotImplementedError
 
+    def get_form_class(self):
+        raise NotImplementedError
+
+    @classmethod
+    def get_bulk_actions(cls):
+        raise NotImplementedError
+
+    @classmethod
+    def get_bulk_action_form_class(cls):
+        raise NotImplementedError
+
     def process_action(self, data):
         raise NotImplementedError
 
-    def action_choices(self, actions=None):
-        for action in (actions or self.get_actions()):
+    @classmethod
+    def action_choices(cls, actions):
+        for action in actions:
             if 'sub_actions' in action:
-                yield from self.action_choices(action['sub_actions'])
+                yield from cls.action_choices(action['sub_actions'])
             else:
                 yield (action['action'], action['label'])
 
 
 class BuggyBugMutator(BugMutator):
-    def get_form_class(self):
-        if self.bug:
-            base = EditForm
-        else:
-            base = CreateForm
+    COMMENT = {
+        'action': 'comment',
+        'label': 'Comment',
+        'help_text': "Leave a comment on the bug or change its priority or assignee",
+    }
 
-        class Form(base):
-            action = forms.ChoiceField(
-                choices=self.action_choices(),
-            )
+    RESOLVED = {
+        'action': 'resolve',
+        'label': "Resolve",
+        'help_text': (
+            "You have fixed the bug, or there is a problem "
+            "with the bug that its creator must rectify."
+        ),
+        'sub_actions': [
+            {
+                'action': State.RESOLVED_FIXED.value,
+                'label': State.RESOLVED_FIXED.label,
+                'help_text': "You have fixed the bug",
+            },
+            {
+                'action': State.RESOLVED_DUPLICATE.value,
+                'label': State.RESOLVED_DUPLICATE.label,
+                'help_text': (
+                    "The bug is a duplicate of another. "
+                    "Consider leaving a comment with #bugnumber."
+                ),
+            },
+            {
+                'action': State.RESOLVED_IMPOSSIBLE.value,
+                'label': State.RESOLVED_IMPOSSIBLE.label,
+                'help_text': "It is not possible to fix the bug.",
+            },
+            {
+                'action': State.RESOLVED_UNREPRODUCIBLE.value,
+                'label': State.RESOLVED_UNREPRODUCIBLE.label,
+                'help_text': (
+                    "You could not reproduce the bug, "
+                    "or require more information to do so."
+                ),
+            },
+            {
+                'action': State.RESOLVED_NOT_A_BUG.value,
+                'label': State.RESOLVED_NOT_A_BUG.label,
+                'help_text': "The bug is by design or intentional.",
+            },
 
-        return Form
+        ],
+    }
+
+    VERIFIED = {
+        'action': State.VERIFIED.value,
+        'label': 'Verify',
+        'help_text': (
+            "You have verified that this bug is fixed."
+        ),
+    }
+
+    LIVE = {
+        'action': State.LIVE.value,
+        'label': 'Pushed live',
+        'help_text': "You have made the change on the live site.",
+    }
+
+    REOPENED = {
+        'action': State.REOPENED.value,
+        'label': "Reopen",
+        'help_text': (
+            "The bug is not resolved. A comment is required to reopen."
+        ),
+    }
+
+    CLOSED = {
+        'action': State.CLOSED.value,
+        'label': "Close",
+        'help_text': (
+            "This bug has been resolved and verified, it is no longer an issue. "
+            "The bug will no longer be in the default view on the homepage."
+        ),
+    }
+
+    ENTRUSTED = {
+        'action': State.ENTRUSTED.value,
+        'label': "Entrust",
+        'help_text': "You would like to make someone responsible for the bug.",
+    }
 
     RESOLVED_STATES = {
         State.RESOLVED_FIXED,
@@ -48,26 +133,61 @@ class BuggyBugMutator(BugMutator):
         State.RESOLVED_NOT_A_BUG,
     }
 
+    def get_form_class(self):
+        if self.bug:
+            base = EditForm
+        else:
+            base = CreateForm
+
+        class Form(base):
+            action = forms.ChoiceField(
+                choices=self.action_choices(self.get_actions()),
+            )
+
+        return Form
+
+    @classmethod
+    def get_bulk_action_form_class(cls):
+        class Form(BulkActionForm):
+            action = forms.ChoiceField(
+                choices=cls.action_choices(cls.get_bulk_actions()),
+            )
+
+        return Form
+
     def get_actions(self):
+        resolved = self.RESOLVED.copy()
+        resolved['help_text'] = lazy(
+            lambda: self.RESOLVED['help_text'] + self.creator_assign_text()
+        )
+        reopened = self.REOPENED.copy()
+        reopened['help_text'] = lazy(
+            lambda: self.RESOLVED['help_text'] + self.resolver_assign_text()
+        )
+        verified = self.VERIFIED.copy()
+        verified['help_text'] = lazy(
+            lambda: self.RESOLVED['help_text'] + self.resolver_assign_text()
+        )
+
         if self.bug:
             state = self.bug.state
         else:
             state = None
 
         if state == State.NEW:
-            return [self.resolved, self.entrusted, self.comment]
+            return [resolved, self.ENTRUSTED, self.COMMENT]
         elif state == State.ENTRUSTED:
-            return [self.resolved, self.comment]
+            return [resolved, self.COMMENT]
         elif state in self.RESOLVED_STATES:
-            return [self.verified, self.reopened, self.live, self.closed, self.comment]
+            return [verified, reopened, self.LIVE, self.CLOSED, self.COMMENT]
         elif state == State.REOPENED:
-            return [self.resolved, self.entrusted, self.comment]
+            return [resolved, self.ENTRUSTED, self.COMMENT]
         elif state == State.LIVE:
-            return [self.reopened, self.closed, self.comment]
+            return [reopened, self.CLOSED, self.COMMENT]
         elif state == State.CLOSED:
-            return [self.reopened, self.comment]
+            return [reopened, self.COMMENT]
         elif state == State.VERIFIED:
-            return [self.reopened, self.live, self.closed, self.comment]
+            return [reopened, self.LIVE, self.CLOSED, self.COMMENT]
         elif state is None:
             return [
                 {'action': 'create', 'label': 'Create', 'help_text': "Create a bug."},
@@ -75,107 +195,13 @@ class BuggyBugMutator(BugMutator):
         else:
             assert False, 'Unknown state %s' % state
 
-    @property
-    def comment(self):
-        return {
-            'action': 'comment',
-            'label': 'Comment',
-            'help_text': "Leave a comment on the bug or change its priority or assignee",
-        }
+    @classmethod
+    def get_bulk_actions(cls):
+        return [
+            cls.ENTRUSTED, cls.RESOLVED, cls.VERIFIED, cls.REOPENED,
+            cls.LIVE, cls.CLOSED, cls.COMMENT,
+        ]
 
-    @property
-    def verified(self):
-        return {
-            'action': State.VERIFIED.value,
-            'label': 'Verify',
-            'help_text': (
-                "You have verified that this bug is fixed."
-            ) + self.resolver_assign_text,
-        }
-
-    @property
-    def live(self):
-        return {
-            'action': State.LIVE.value,
-            'label': 'Pushed live',
-            'help_text': "You have made the change on the live site.",
-        }
-
-    @property
-    def reopened(self):
-        return {
-            'action': State.REOPENED.value,
-            'label': "Reopen",
-            'help_text': (
-                "The bug is not resolved. A comment is required to reopen."
-            ) + self.resolver_assign_text,
-        }
-
-    @property
-    def closed(self):
-        return {
-            'action': State.CLOSED.value,
-            'label': "Close",
-            'help_text': (
-                "This bug has been resolved and verified, it is no longer an issue. "
-                "The bug will no longer be in the default view on the homepage."
-            )
-        }
-
-    @property
-    def entrusted(self):
-        return {
-            'action': State.ENTRUSTED.value,
-            'label': "Entrust",
-            'help_text': "You would like to make someone responsible for the bug.",
-        }
-
-    @property
-    def resolved(self):
-        return {
-            'action': 'resolve',
-            'label': "Resolve",
-            'help_text': (
-                "You have fixed the bug, or there is a problem "
-                "with the bug that its creator must rectify."
-            ) + self.creator_assign_text,
-            'sub_actions': [
-                {
-                    'action': State.RESOLVED_FIXED.value,
-                    'label': State.RESOLVED_FIXED.label,
-                    'help_text': "You have fixed the bug",
-                },
-                {
-                    'action': State.RESOLVED_DUPLICATE.value,
-                    'label': State.RESOLVED_DUPLICATE.label,
-                    'help_text': (
-                        "The bug is a duplicate of another. "
-                        "Consider leaving a comment with #bugnumber."
-                    ),
-                },
-                {
-                    'action': State.RESOLVED_IMPOSSIBLE.value,
-                    'label': State.RESOLVED_IMPOSSIBLE.label,
-                    'help_text': "It is not possible to fix the bug.",
-                },
-                {
-                    'action': State.RESOLVED_UNREPRODUCIBLE.value,
-                    'label': State.RESOLVED_UNREPRODUCIBLE.label,
-                    'help_text': (
-                        "You could not reproduce the bug, "
-                        "or require more information to do so."
-                    ),
-                },
-                {
-                    'action': State.RESOLVED_NOT_A_BUG.value,
-                    'label': State.RESOLVED_NOT_A_BUG.label,
-                    'help_text': "The bug is by design or intentional.",
-                },
-
-            ],
-        }
-
-    @property
     def resolver_assign_text(self):
         if self.bug and self.latest_resolver:
             return " Unless you pick another assignee, the bug will be assigned to {}.".format(
@@ -184,7 +210,6 @@ class BuggyBugMutator(BugMutator):
         else:
             return ''
 
-    @property
     def creator_assign_text(self):
         if self.bug and self.bug.created_by:
             return " Unless you pick another assignee, the bug will be assigned to {}.".format(
