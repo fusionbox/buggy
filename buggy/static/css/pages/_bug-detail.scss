@@ -71,7 +71,7 @@
 
 
 .bugDetailAction {
-  @include topStroke(5px);
+  @include topStroke(2px);
   padding-top: 2rem;
   padding-bottom: 2rem;
   max-width: 64rem;
@@ -125,7 +125,6 @@
   max-width: 48rem;
   font-weight: 700;
   margin-top: 1rem;
-  margin-bottom: 1.4rem;
-  line-height: 1.15;
-  text-transform: capitalize;
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
 }

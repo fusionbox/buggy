@@ -16,19 +16,16 @@
   }
 
   input[type="submit"] {
-    background: none;
-    color: $colorPrimary;
     cursor: pointer;
     transition: color .2s ease, border-color .2s ease;
-
-    &:hover {
-      color: $blue;
-      border-color: $blue;
-    }
+    max-width: 200px;
+    display: block;
+    float: right;
   }
 
   .forgotPassword {
     display: inline-block;
     margin-bottom: 2rem;
+    margin-top: .4rem;
   }
 }

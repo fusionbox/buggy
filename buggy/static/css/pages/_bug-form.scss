@@ -63,7 +63,7 @@
   margin-bottom: 2rem;
 
   textarea {
-    font-size: 1.2rem;
+    font-size: 1rem;
     width: 100%;
     resize: vertical;
     border: 2px solid $colorPrimary;
@@ -72,16 +72,17 @@
 
 .previewTarget {
   font-size: 1.2rem;
-  background-color: $white;
+  background-color: rgba(0,0,0,.01);
+  color: rgba(0,0,0,.75);
   width: 100%;
   padding: 1rem;
   border: 2px solid currentColor;
   margin-left: 2rem;
   margin-top: 2rem;
-  margin-bottom: 4.5rem;
 }
 
 .bugCommentEditor,
 .previewMarkdown {
   flex: 1 0 50%;
+  height: 100%;
 }
