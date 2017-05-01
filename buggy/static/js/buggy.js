@@ -168,12 +168,12 @@ jQuery(function($) {
     });
   }
 
-  $('#check_all_bugs').change(function() {
+  $(document).on('change', '#check_all_bugs', function() {
     $('input[name=bugs]').prop('checked', $(this).prop('checked'));
   });
-  $('input[name=bugs], #check_all_bugs').change(setActiveBulkActions);
+  $(document).on('change', 'input[name=bugs], #check_all_bugs', setActiveBulkActions);
 
-  $('input[name=bugs]').change(function() {
+  $(document).on('change', 'input[name=bugs]', function() {
     $(this).closest('tr').toggleClass('checked', $(this).prop('checked'));
   });
 
