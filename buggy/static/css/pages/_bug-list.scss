@@ -3,14 +3,21 @@
   min-width: 100%;
   margin-bottom: 4rem;
 
+  tr.checked td {
+    background-color: transparentize($eggplant, .8);
+    border-bottom: 1px solid $eggplant;
+    border-top: 1px solid $eggplant;
+
+    a {
+      box-shadow: none;
+      text-shadow: none;
+    }
+  }
+
   td,
   th {
     padding: .75rem 1rem .5rem 1rem;
     font-size: 1rem;
-
-    &:first-of-type {
-      padding-left: 0;
-    }
   }
 
   td {
@@ -37,7 +44,16 @@
         transform: rotate(180deg);
       }
 
+      &.active:before {
+        content: url('../img/chevron-down.svg');
+        position: absolute;
+        left: -1.25rem;
+        top: 2px;
+        transform: rotate(180deg);
+      }
+
       &.active.desc:before {
+        top: 0;
         transform: rotate(0);
       }
     }
@@ -98,8 +114,6 @@
   }
 }
 
-
-
 // Preset List Styles
 .presetContainer {
   @include topStroke;
@@ -107,6 +121,7 @@
 
   h2 {
     font-weight: 600;
+    margin-bottom: 0;
   }
 
   ul {
@@ -121,10 +136,13 @@
 .presetFilterList {
   list-style: none;
   padding-left: 0;
+  margin-top: .7rem;
+  margin-bottom: 1.5rem;
 
   li {
     position: relative;
     margin-bottom: .5rem;
+    line-height: 1;
 
     a {
       font-weight: 600;
@@ -141,6 +159,7 @@
 
 .presetItem {
   position: relative;
+  font-size: 1rem;
 
   form {
     position: absolute;
@@ -169,6 +188,7 @@
   i:before {
     content: url('../img/lock.svg');
     margin-right: .2rem;
+    vertical-align: 2px;
   }
 }
 
@@ -182,13 +202,14 @@
     top: 0;
     left: 0;
     width: 100%;
+    background-color: transparent;
   }
 }
 
 .add-preset {
   @include topStroke(2px);
   font-size: 1rem;
-  padding-top: 1rem;
+  padding-top: .6rem;
 
   label {
     // Todo: actually remove this from the DOM
@@ -251,6 +272,10 @@
       position: absolute;
       top: 15px;
       left: 0;
+
+      &:before {
+        left: 1rem;
+      }
     }
   }
 
@@ -274,6 +299,7 @@
 
       &:before {
         top: 10px;
+        left: 1rem;
       }
     }
   }
@@ -307,11 +333,6 @@
   }
 }
 
-.bugListProject {
-  th& {
-  }
-}
-
 .bugListCount {
   margin-top: 1rem;
   margin-bottom: 3rem;
@@ -319,20 +340,21 @@
   position: relative;
 
   span {
-    font-weight: 400;
+    font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
     font-size: 80%;
     font-family: $fontMonospace;
     font-size: 1rem;
-    padding: .5rem 1rem .25rem 1rem;
-    background-color: $colorPrimary;
-    color: $colorBackground;
-    border-bottom: 4px solid $colorPrimaryShade;
+    padding: .2rem 1rem;
+    border: 2px solid currentColor;
+    color: $colorPrimary;
     position: relative;
   }
 }
 
+
+// Bug List Filters
 .bugFilterGroup {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr;

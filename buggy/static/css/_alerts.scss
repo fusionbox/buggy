@@ -16,15 +16,17 @@
   padding-left: 0;
 
   li {
-    padding: .75rem 1.25rem .5rem .75rem;
-    font-weight: 300;
+    line-height: 1.25;
+    padding: 1rem 1.25rem 1rem 1rem;
+    font-weight: 400;
     letter-spacing: .4px;
     display: inline-block;
 
     &:before {
+      height: 10px;
       display: inline-block;
       margin-right: .4rem;
-      vertical-align: -3px;
+      vertical-align: -1px;
     }
   }
 

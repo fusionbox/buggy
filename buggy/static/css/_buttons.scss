@@ -2,19 +2,18 @@ button,
 a.button {
   display: inline-block;
   transition: all .2s ease;
-  font-family: $fontMonospace;
-  text-transform: uppercase;
-  letter-spacing: 1px;
   @include button;
 
-  &:hover {
-    border: 2px solid currentColor;
-    color: $linkHoverColor;
+  &:hover,
+  &:focus {
+    color: $colorBackground;
   }
 
   &[disabled] {
     cursor: initial;
-    opacity: .65;
+    color: rgba(0,0,0,.5);
+    background-color: rgba(0,0,0,.15);
+    border-color: rgba(0,0,0,.15);
   }
 
   &--small {
@@ -24,20 +23,33 @@ a.button {
   &.open,
   &[value='resolved-fixed'],
   &[value='resolved-duplicate'] {
-    color: $blue;
+    background-color: $blue;
+    border-color: darken($blue, 15%);
 
-    &:hover {
-      color: $blueBright;
+    &[disabled] {
+      cursor: initial;
+      color: rgba(0,0,0,.5);
+      background-color: rgba(0,0,0,.15);
+      border-color: rgba(0,0,0,.15);
     }
   }
 
   &[value='resolved-impossible'],
   &[value='resolved-unreproducible'],
   &[value='resolved-notabug'] {
-    color: $yellow;
+    background-color: $warningColor;
+    border-color: darken($warningColor, 5%);
+
+    &[disabled] {
+      cursor: initial;
+      color: rgba(0,0,0,.5);
+      background-color: rgba(0,0,0,.15);
+      border-color: rgba(0,0,0,.15);
+    }
   }
 
   &.cancel {
-    color: $red;
+    background-color: $errorColor;
+    border-color: darken($errorColor, 10%);
   }
 }
