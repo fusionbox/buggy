@@ -168,6 +168,8 @@ jQuery(function($) {
     $('#check_all_bugs').prop(
       'checked', $('input[name=bugs]:checked').length === $('input[name=bugs]').length
     );
+    $('.bugListTable tbody tr').removeClass('checked');
+    $('.bugListTable tbody tr:has(input[name=bugs]:checked)').addClass('checked');
     var actionLists = bugNumbers.map(function(x) { return buggyData.bugActions[x]; });
     var allowedActions = intersection(actionLists);
     $('.offCanvasForm button[name=action]').each(function(i, e) {
@@ -184,8 +186,9 @@ jQuery(function($) {
   });
   $(document).on('change', 'input[name=bugs], #check_all_bugs', setActiveBulkActions);
 
-  $(document).on('change', 'input[name=bugs]', function() {
-    $(this).closest('tr').toggleClass('checked', $(this).prop('checked'));
+  $(document).on('click', '#uncheck-all', function() {
+    $('input[name=bugs]').prop('checked', false);
+    setActiveBulkActions();
   });
 
   setActiveBulkActions();
