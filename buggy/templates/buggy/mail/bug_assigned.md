@@ -7,6 +7,9 @@ content-type: markdown
 ## For project "{{ bug.project }}"
 
 ### {{ action.user.get_short_name }} {{ action.description }}
+{% if action.settitle and action.order != 0 %}
+### Title changed from **{{ action.settitle.previous_title }}** to **{{ action.settitle.title }}**
+{% endif %}
 
 {% if action.comment %}
 {{ action.comment.comment|safe }}
