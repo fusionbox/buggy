@@ -38,10 +38,6 @@ input {
 
   &[type="submit"] {
     @include button;
-
-    &:hover {
-      color: $colorActivePrimary;
-    }
   }
 
   &[type="checkbox"] {

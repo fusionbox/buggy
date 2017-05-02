@@ -37,7 +37,7 @@
 
   &:hover {
     background-color: $colorPrimaryTint;
-    border-color: $colorPrimary;
+    border-color: darken($colorPrimaryTint, 5%);
   }
 }
 
