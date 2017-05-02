@@ -6,7 +6,7 @@ content-type: markdown
 
 ## For project "{{ bug.project }}"
 
-### {{ action.description }}
+### {{ action.user.get_short_name }} {{ action.description }}
 
 {% if action.comment %}
 {{ action.comment.comment|safe }}
