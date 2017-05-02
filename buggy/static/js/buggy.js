@@ -121,7 +121,7 @@ jQuery(function($) {
     $.pjax.submit(event, '#pjax-container');
   });
   $('form[data-pjax] :input:not(#id_search)').on('change', pjaxSubmit);
-  $('form[data-pjax] #id_search').on('keyup', pjaxSubmit);
+  $('form[data-pjax] #id_search').on('keyup paste', pjaxSubmit);
 
   $(document).on('pjax:popstate', location.reload);
 
