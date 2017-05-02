@@ -162,11 +162,11 @@ class BuggyBugMutator(BugMutator):
         )
         reopened = self.REOPENED.copy()
         reopened['help_text'] = lazy(
-            lambda: self.RESOLVED['help_text'] + self.resolver_assign_text()
+            lambda: self.REOPENED['help_text'] + self.resolver_assign_text()
         )
         verified = self.VERIFIED.copy()
         verified['help_text'] = lazy(
-            lambda: self.RESOLVED['help_text'] + self.resolver_assign_text()
+            lambda: self.VERIFIED['help_text'] + self.resolver_assign_text()
         )
 
         if self.bug:
