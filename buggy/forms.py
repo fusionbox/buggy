@@ -112,8 +112,7 @@ class PresetFilterForm(forms.ModelForm):
         }
 
 
-class EditForm(forms.Form):
-    title = forms.CharField(max_length=100, required=True)
+class BugFormBase(forms.Form):
     comment = forms.CharField(widget=forms.Textarea, required=False)
     priority = forms.TypedChoiceField(
         choices=[(i.value, i.label) for i in Priority],
@@ -124,6 +123,10 @@ class EditForm(forms.Form):
         queryset=User.objects.filter(is_active=True),
         required=False,
     )
+
+
+class EditForm(BugFormBase):
+    title = forms.CharField(max_length=100, required=True)
     attachments = MultipleFileField(
         required=False,
     )
@@ -134,9 +137,7 @@ class CreateForm(EditForm):
     project = forms.ModelChoiceField(queryset=Project.objects.filter(is_active=True))
 
 
-class BulkActionForm(EditForm):
-    attachments = None
-
+class BulkActionForm(BugFormBase):
     def __init__(self, *args, **kwargs):
         bug_queryset = kwargs.pop('queryset')
         self.bug_actions = kwargs.pop('bug_actions')
