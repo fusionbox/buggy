@@ -1,4 +1,14 @@
 jQuery(function($) {
+  var buggyData = {};
+
+  function parseBuggyData() {
+    ["previewMarkdownUrl", "openBugs", "userNames", "bugActions", "harvestPlatformConfig"].map(function(key) {
+      buggyData[key] = JSON.parse($("#buggyData-" + key).text() || null);
+    });
+    window._harvestPlatformConfig = buggyData.harvestPlatformConfig;
+  }
+  parseBuggyData();
+
   $('select[name="projects"]').select2();
   $('select[name="project"]').select2();
 
@@ -17,10 +27,10 @@ jQuery(function($) {
 
   $('textarea[name="comment"]').atwho({
     at: '@',
-    data: window.buggyData.userNames,
+    data: buggyData.userNames,
   }).atwho({
     at: '#',
-    data: window.buggyData.openBugs,
+    data: buggyData.openBugs,
     displayTpl: '<li data-value="#${number}">#${number} <small>${title}</small></li>',
     insertTpl: '#${number}',
     searchKey: 'number',
@@ -53,7 +63,7 @@ jQuery(function($) {
 
     var markdown = $container.find('[name="comment"]').val();
 
-    $.post(window.buggyData.previewMarkdownUrl, {preview: markdown}, function(resp) {
+    $.post(buggyData.previewMarkdownUrl, {preview: markdown}, function(resp) {
       $container.find('.previewTarget').html(resp).show();
       requestPending = false;
       if (requestCancelled) {
@@ -100,6 +110,7 @@ jQuery(function($) {
 
   $(document).on('pjax:end', function() {
     setActiveBulkActions();
+    parseBuggyData();
     $('.subActions').hide();
     $('.actions > button, .actions .open').show();
   });
@@ -121,7 +132,7 @@ jQuery(function($) {
     $.pjax.submit(event, '#pjax-container');
   });
   $('form[data-pjax] :input:not(#id_search)').on('change', pjaxSubmit);
-  $('form[data-pjax] #id_search').on('keyup', pjaxSubmit);
+  $('form[data-pjax] #id_search').on('keyup paste', pjaxSubmit);
 
   $(document).on('pjax:popstate', location.reload);
 
@@ -157,7 +168,7 @@ jQuery(function($) {
     $('#check_all_bugs').prop(
       'checked', $('input[name=bugs]:checked').length === $('input[name=bugs]').length
     );
-    var actionLists = bugNumbers.map(function(x) { return window.buggyData.bugActions[x]; });
+    var actionLists = bugNumbers.map(function(x) { return buggyData.bugActions[x]; });
     var allowedActions = intersection(actionLists);
     $('.offCanvasForm button[name=action]').each(function(i, e) {
       $(e).prop('disabled', allowedActions.indexOf(e.value) < 0);

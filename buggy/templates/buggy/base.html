@@ -12,17 +12,21 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto+Mono:300,700|Work+Sans:300,400,600,700" rel="stylesheet">
 
     {% url 'buggy:markdown_preview' as markdown_url %}
-    <script>
-      window.buggyData = {
-        previewMarkdownUrl: {{ markdown_url|json }}
-      };
-      {% if buggy_user_names %}
-        window.buggyData.userNames = {{ buggy_user_names|json }};
-      {% endif %}
-      {% if buggy_open_bugs %}
-        window.buggyData.openBugs = {{ buggy_open_bugs|json }};
-      {% endif %}
+    <script type="application/json" id="buggyData-previewMarkdownUrl">
+      {{ markdown_url|json }}
     </script>
+
+    {% if buggy_user_names %}
+    <script type="application/json" id="buggyData-userNames">
+      {{ buggy_user_names|json }}
+    </script>
+    {% endif %}
+
+    {% if buggy_open_bugs %}
+    <script type="application/json" id="buggyData-openBugs">
+      {{ buggy_open_bugs|json }}
+    </script>
+    {% endif %}
 
     {% compress js %}
     <script src="{% static 'js/jquery-2.2.4.min.js' %}"></script>

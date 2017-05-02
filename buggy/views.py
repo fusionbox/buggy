@@ -16,7 +16,7 @@ from django.template.defaultfilters import capfirst, pluralize
 from .models import Bug, Action, Comment
 from .forms import FilterForm, PresetFilterForm
 from .mutation import BuggyBugMutator
-from .enums import State
+from .enums import State, Priority
 from . import webhook
 
 User = get_user_model()
@@ -234,6 +234,12 @@ class BugDetailView(LoginRequiredMixin, BugMutationMixin, FormView):
         context = super().get_context_data(**kwargs)
         context['bug'] = self.object
         return context
+
+    def get_initial(self):
+        return {
+            'title': self.object.title,
+            'priority': self.object.priority.value,
+        }
 
 
 class BugCreateView(BugMutationMixin, FormView):

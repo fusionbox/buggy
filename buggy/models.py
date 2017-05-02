@@ -254,6 +254,7 @@ class Comment(Operation):
     def description(self):
         return 'commented on the bug'
 
+
 class SetTitle(Operation):
     action = models.OneToOneField(Action, primary_key=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
@@ -261,6 +262,20 @@ class SetTitle(Operation):
     def apply(self):
         self.action.bug.title = self.title
         self.action.bug.fulltext += ' ' + self.title
+
+    @property
+    def previous_title(self):
+        title = self.action.bug.title
+        for action in self.action.bug.actions.all():
+            if action == self.action:
+                break
+            if hasattr(action, 'settitle'):
+                title = action.settitle.title
+        return title
+
+    @property
+    def description(self):
+        return 'changed the title'
 
 
 class SetAssignment(Operation):

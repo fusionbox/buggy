@@ -1,7 +1,7 @@
 {% load argonauts buggy_tags humanize %}
 
-<script type="text/javascript">
-  window.buggyData = {'bugActions' : {{ bulk_action_form.bug_actions|json }}};
+<script type="application/json" id="buggyData-bugActions">
+  {{ bulk_action_form.bug_actions|json }}
 </script>
 
 <div class="bugListCount"><span>Matching Bugs: {{ bugs|length|intcomma }}</span></div>

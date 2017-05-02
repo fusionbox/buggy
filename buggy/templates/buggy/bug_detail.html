@@ -6,11 +6,11 @@
 
 {% block content %}
 
-<script>
-  window._harvestPlatformConfig = {
+<script type="application/json" id="buggyData-harvestPlatformConfig">
+  {
     "applicationName": "Buggy",
     "permalink": {{ bug.get_absolute_url|absolutize|json }}
-  };
+  }
 </script>
 <script async src="https://platform.harvestapp.com/assets/platform.js"></script>
 <section class="bugMetadata">
@@ -44,6 +44,15 @@
   <section class="bugDetailAction" id="action-{{ action.order }}">
     <h1><a href="#action-{{ action.order }}">{{ action.created_at|absolutedate }}</a></h1>
     <p class="bugDetailActionDescription"><strong>&raquo;</strong> <span> {{ action.user.get_short_name }} {{ action.description }}</span></p>
+    {% if action.settitle and not forloop.first %}
+    <p class="bugTitleChange">
+      Title changed from
+      <strong>{{ action.settitle.previous_title }}</strong>
+      to
+      <strong>{{ action.settitle.title }}</strong>.
+    </p>
+    {% endif %}
+
     {% if action.comment %}
       {{ action.comment.html|safe }}
     {% endif %}

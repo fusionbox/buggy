@@ -113,6 +113,7 @@ class PresetFilterForm(forms.ModelForm):
 
 
 class EditForm(forms.Form):
+    title = forms.CharField(max_length=100, required=True)
     comment = forms.CharField(widget=forms.Textarea, required=False)
     priority = forms.TypedChoiceField(
         choices=[(i.value, i.label) for i in Priority],
@@ -131,7 +132,6 @@ class EditForm(forms.Form):
 class CreateForm(EditForm):
     comment = forms.CharField(widget=forms.Textarea)
     project = forms.ModelChoiceField(queryset=Project.objects.filter(is_active=True))
-    title = forms.CharField(max_length=100)
 
 
 class BulkActionForm(EditForm):
