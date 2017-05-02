@@ -61,7 +61,7 @@
     </thead>
     <tbody>
       {% for bug in bugs %}
-      <tr data-number="{{ bug.number }}">
+      <tr class="state-{{ bug.state.value }} priority-{{ bug.priority.value }}" data-number="{{ bug.number }}">
         <td class="bugListCheck">
           <label for="bulk-select-checkbox-{{bug.id}}">Select {{ bug.number }}</label>
           <input type="checkbox" name="bugs" value="{{ bug.id }}" id="bulk-select-checkbox-{{bug.id}}">
