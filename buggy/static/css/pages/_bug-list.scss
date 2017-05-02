@@ -101,6 +101,7 @@
       bottom: -3.75rem;
       left: calc(50% - 4.5rem);
       content: '';
+      outline: 5px solid red;
       font-size: 1.25rem;
       animation-name: glyph;
       animation-iteration-count: infinite;
@@ -296,6 +297,7 @@
     input {
       margin-top: 0;
       position: relative;
+      min-width: 15px;
 
       &:before {
         top: 10px;
@@ -479,8 +481,22 @@
       color: $offWhite;
     }
 
-    button:not([disabled]):hover {
-      opacity: .8;
+    button:not([disabled]) {
+      background-color: $colorPrimaryTint;
+      border-color: $colorPrimary;
+
+      &:hover {
+        opacity: .8;
+      }
+
+      &.cancel {
+        background-color: $red;
+      }
+    }
+
+    button[disabled] {
+      color: rgba(255, 255, 255, .5);
+      background-color: rgba(0,0,0,.5);
     }
 
     .actions {
