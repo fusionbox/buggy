@@ -6,11 +6,11 @@
 
 {% block content %}
 
-<script>
-  window._harvestPlatformConfig = {
+<script type="application/json" id="buggyData-harvestPlatformConfig">
+  {
     "applicationName": "Buggy",
     "permalink": {{ bug.get_absolute_url|absolutize|json }}
-  };
+  }
 </script>
 <script async src="https://platform.harvestapp.com/assets/platform.js"></script>
 <section class="bugMetadata">
