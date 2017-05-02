@@ -175,19 +175,19 @@ class BuggyBugMutator(BugMutator):
             state = None
 
         if state == State.NEW:
-            return [resolved, self.ENTRUSTED, self.COMMENT]
+            return [self.COMMENT, resolved, self.ENTRUSTED]
         elif state == State.ENTRUSTED:
-            return [resolved, self.COMMENT]
+            return [self.COMMENT, resolved]
         elif state in self.RESOLVED_STATES:
-            return [verified, reopened, self.LIVE, self.CLOSED, self.COMMENT]
+            return [self.COMMENT, verified, reopened, self.LIVE, self.CLOSED]
         elif state == State.REOPENED:
-            return [resolved, self.ENTRUSTED, self.COMMENT]
+            return [self.COMMENT, resolved, self.ENTRUSTED]
         elif state == State.LIVE:
-            return [reopened, self.CLOSED, self.COMMENT]
+            return [self.COMMENT, reopened, self.CLOSED]
         elif state == State.CLOSED:
-            return [reopened, self.COMMENT]
+            return [self.COMMENT, reopened]
         elif state == State.VERIFIED:
-            return [reopened, self.LIVE, self.CLOSED, self.COMMENT]
+            return [self.COMMENT, reopened, self.LIVE, self.CLOSED]
         elif state is None:
             return [
                 {'action': 'create', 'label': 'Create', 'help_text': "Create a bug."},
@@ -247,6 +247,9 @@ class BuggyBugMutator(BugMutator):
 
             if data.get('priority') and data['priority'] != action.bug.priority:
                 action.set_priority(data['priority'])
+
+            if data.get('title') and data['title'] != action.bug.title:
+                action.set_title(data['title'])
         else:
             action = Action.build_bug(
                 user=self.user,
