@@ -3,7 +3,7 @@
     {% for action in actions %}
     {% if action.sub_actions %}
     <div class="nestedAction">
-        <button class="open" value="{{ action.action }}" title="{{ action.help_text }}">
+        <button type="button" class="open" value="{{ action.action }}" title="{{ action.help_text }}">
             {{ action.label }}
         </button>
         <div class="subActions">
