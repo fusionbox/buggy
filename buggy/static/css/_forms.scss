@@ -41,43 +41,52 @@ input {
   }
 
   &[type="checkbox"] {
-    margin-bottom: 2rem;
-    padding-left: 2rem;
+    position: absolute;
+    width: 1px;
+    height: 1px;
     border: 0;
-    max-width: 15px;
 
-    &:hover {
-      cursor: pointer;
+    ~ label {
+
+      &:hover {
+        cursor: pointer;
+
+        &:before {
+          background-color: $colorPrimaryTint;
+        }
+      }
+
+      &:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 2;
+        width: 16px;
+        height: 16px;
+        box-shadow: inset 0 0 0 2px $colorPrimary;
+        background-color: $colorBackground;
+        background-size: 8px;
+        background-repeat: no-repeat;
+        background-position: 4px 3px;
+        transition: background-color .2s ease;
+      }
+    }
+
+    &:checked ~ label:before {
+      z-index: 2;
+      background-color: $colorPrimary;
+      background-image: url('../img/check.svg');
+    }
+
+    &:hover:checked ~ label:before {
+      background-color: $linkHoverColor;
+      border-color: darken($linkHoverColor, 5%);
     }
 
     &:focus {
       box-shadow: none;
       outline: 0;
-    }
-
-    &:before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: -1px;
-      width: 16px;
-      height: 16px;
-      box-shadow: inset 0 0 0 2px $colorPrimary;
-      background-image: url('../img/check.svg');
-      background-size: 8px;
-      background-repeat: no-repeat;
-      background-position: 4px 3px;
-      transition: background-color .2s ease;
-    }
-
-    &:checked:before {
-      z-index: 2;
-      background-color: $colorPrimary;
-    }
-
-    &:hover:checked:before {
-      background-color: $linkHoverColor;
-      border-color: darken($linkHoverColor, 5%);
     }
   }
 
@@ -140,7 +149,7 @@ span.select2-container {
   background-image: url('../img/chevron-down.svg');
   background-position: calc(100% - 10px) 50%;
   background-repeat: no-repeat;
-}
+}\
 
 input,
 select,
@@ -152,6 +161,13 @@ select,
 
 .select2-container--default li.select2-results__option--highlighted[aria-selected] {
   background-color: $colorPrimaryShade;
+}
+
+.select2-container--default .select2-results > .select2-results__options {
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  font-size: .925rem;
+  font-family: $fontPrimary;
 }
 
 // Select2-Specific Styles

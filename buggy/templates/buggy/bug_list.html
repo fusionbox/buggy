@@ -1,5 +1,5 @@
 {% extends "buggy/base.html" %}
-{% load static %}
+{% load static buggy_tags %}
 
 {% block content %}
 
@@ -32,8 +32,17 @@
   <div class="presetContainer">
     <h2>Preset Filters</h2>
     <ul class="presetFilterList">
-      <li class="presetItem presetLocked"><a href="{% url 'buggy:bug_list' %}"><i class="presetLocked"></i><span>Current</span></a></li>
-      <li class="presetItem presetLocked"><a href="{% url 'buggy:bug_list' %}?assigned_to={{ request.user.id }}"><i class="presetLocked"></i><span>Mine</span></a></li>
+      <li class="presetItem presetLocked">
+        <a href="{% url 'buggy:bug_list' %}">
+          <i class="presetLocked">{% svg 'img/lock.svg' %}</i><span>Current</span>
+        </a>
+      </li>
+      <li class="presetItem presetLocked">
+        <a href="{% url 'buggy:bug_list' %}?assigned_to={{ request.user.id }}">
+          <i class="presetLocked">{% svg 'img/lock.svg' %}</i>
+          <span>Mine</span>
+      </a>
+      </li>
       {% for preset in request.user.presetfilter_set.all %}
       {% include 'buggy/_presetfilter.html' %}
       {% endfor %}

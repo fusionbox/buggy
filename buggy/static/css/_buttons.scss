@@ -32,6 +32,11 @@ a.button {
       background-color: rgba(0,0,0,.15);
       border-color: rgba(0,0,0,.15);
     }
+
+    &:hover {
+      background-color: darken($blue, 15%);
+      border-color: darken($blue, 20%);
+    }
   }
 
   &[value='resolved-impossible'],
@@ -46,10 +51,20 @@ a.button {
       background-color: rgba(0,0,0,.15);
       border-color: rgba(0,0,0,.15);
     }
+
+    &:hover {
+      background-color: darken($warningColor, 10%);
+      border-color: darken($warningColor, 15%);
+    }
   }
 
   &.cancel {
     background-color: $errorColor;
-    border-color: darken($errorColor, 10%);
+    border-color: darken($errorColor, 15%);
+
+    &:hover {
+      background-color: darken($errorColor, 15%);
+      border-color: darken($errorColor, 25%);
+    }
   }
 }

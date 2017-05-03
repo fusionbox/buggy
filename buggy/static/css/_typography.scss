@@ -1,7 +1,7 @@
 time {
-
   &.absoluteDate {
     font-family: $fontMonospace;
+    text-transform: uppercase;
   }
 
   &.relativeDate {
@@ -34,8 +34,14 @@ code {
   font-size: 2rem;
 }
 
+
+.help-text {
+  font-size: .875rem;
+  font-style: italic;
+}
+
 ::selection {
-  background-color: $purple;
+  background-color: $blue;
   color: $white;
   text-shadow: none;
   box-shadow: none;

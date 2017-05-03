@@ -30,12 +30,11 @@
 </section>
 
 <p class="bugDetailCurrentState">
-  <strong>&raquo;</strong>
   <span>
-  Created by <strong>{{ bug.created_by.get_short_name }}</strong> {{ bug.created_at|relativedate }},
-  state is <strong>{{ bug.state }}</strong>{% if bug.assigned_to %}<br> Currently
-  assigned to <strong>{{ bug.assigned_to.get_short_name }}</strong>{% endif %}
-  with priority <strong>{{ bug.priority.label }}</strong>.
+  Created by <strong>@{{ bug.created_by.get_short_name }}</strong> {{ bug.created_at|relativedate }},
+  state is <strong class="bugStateInline">{{ bug.state }}</strong>{% if bug.assigned_to %}<br> Currently
+  assigned to <strong>@{{ bug.assigned_to.get_short_name }}</strong>{% endif %}
+  with priority <strong class="bugStateInline">{{ bug.priority.label }}</strong>.
   </span>
 </p>
 
@@ -43,13 +42,15 @@
 
   <section class="bugDetailAction" id="action-{{ action.order }}">
     <h1><a href="#action-{{ action.order }}">{{ action.created_at|absolutedate }}</a></h1>
-    <p class="bugDetailActionDescription"><strong>&raquo;</strong> <span> {{ action.user.get_short_name }} {{ action.description }}</span></p>
+    <p class="bugDetailActionDescription">{{ action.user.get_short_name }} {{ action.description }}</p>
     {% if action.settitle and not forloop.first %}
     <p class="bugTitleChange">
-      Title changed from
-      <strong>{{ action.settitle.previous_title }}</strong>
-      to
-      <strong>{{ action.settitle.title }}</strong>.
+      <span>
+        Title changed from
+        <strong>{{ action.settitle.previous_title }}</strong>
+        to
+        <strong>{{ action.settitle.title }}</strong>.
+      </span>
     </p>
     {% endif %}
 

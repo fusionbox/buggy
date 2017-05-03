@@ -9,6 +9,7 @@
         'alerts',
         'sections/header',
         'sections/footer',
+        'sections/bulk-actions',
         'pages/bug-list',
         'pages/bug-detail',
         'pages/bug-form',
@@ -20,7 +21,7 @@
 
 html {
   font-family: $fontPrimary;
-  font-size: .875rem;
+  font-size: .9rem;
   line-height: 1.4;
   color: $colorPrimary;
   background-color: $colorBackground;

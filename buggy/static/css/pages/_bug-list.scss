@@ -1,12 +1,15 @@
 .bugListTable {
   border-collapse: collapse;
-  min-width: 100%;
+  table-layout: fixed;
+  width: 100%;
   margin-bottom: 4rem;
 
   tr.checked td {
     background-color: transparentize($eggplant, .8);
-    border-bottom: 1px solid $eggplant;
-    border-top: 1px solid $eggplant;
+
+    span {
+      transition: background-color .2s ease;
+    }
 
     a {
       box-shadow: none;
@@ -16,44 +19,48 @@
 
   td,
   th {
-    padding: .75rem 1rem .5rem 1rem;
-    font-size: 1rem;
+    padding: .75rem .5rem .5rem .25rem;
+    font-size: .925rem;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
   }
 
   td {
-    border-bottom: 1px solid transparentize($colorPrimary, .95);
+    border-bottom: 2px solid transparentize($colorPrimary, .95);
   }
 
   th {
-    white-space: nowrap;
-    border-bottom: 3px solid currentColor;
-    border-top: 3px solid currentColor;
+    border-bottom: 3px solid $colorPrimaryTint;
+    border-top: 3px solid $colorPrimaryTint;
     padding-bottom: 1rem;
     padding-top: 1rem;
     vertical-align: bottom;
     font-weight: 600;
 
+    @include large {
+      white-space: nowrap;
+    }
+
     a {
+      font-family: $fontPrimary;
+      font-weight: 600;
       box-shadow: none;
       position: relative;
 
-      &.active:before {
-        content: url('../img/chevron-down.svg');
-        position: absolute;
-        left: -1.25rem;
-        transform: rotate(180deg);
+      &.active {
+        color: $colorPrimaryTint;
       }
 
       &.active:before {
+        display: inline-block;
         content: url('../img/chevron-down.svg');
-        position: absolute;
-        left: -1.25rem;
-        top: 2px;
+        position: relative;
+        margin-left: -.25rem;
+        vertical-align: baseline;
         transform: rotate(180deg);
       }
 
       &.active.desc:before {
-        top: 0;
         transform: rotate(0);
       }
     }
@@ -97,11 +104,11 @@
     }
 
     &:before {
-      position: absolute;
-      bottom: -3.75rem;
-      left: calc(50% - 4.5rem);
+      display: block;
       content: '';
-      outline: 5px solid red;
+      position: absolute;
+      bottom: -3.8rem;
+      left: calc(50% - 4.5rem);
       font-size: 1.25rem;
       animation-name: glyph;
       animation-iteration-count: infinite;
@@ -149,7 +156,6 @@
       font-weight: 600;
       box-shadow: none;
       text-shadow: none;
-      padding-left: 1.5rem;
     }
 
     &.presetLocked a {
@@ -161,49 +167,38 @@
 .presetItem {
   position: relative;
   font-size: 1rem;
+  margin-right: 0;
+  display: flex;
+
+  &.presetLocked {
+    padding-left: 0;
+  }
 
   form {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 20px;
+    margin-left: .2rem;
+    margin-right: .6rem;
 
-    &:hover {
-      opacity: .2;
-    }
-
-    &:before {
-      content: url('../img/delete.svg');
-      width: 15px;
-      vertical-align: -1px;
-      text-align: center;
+    label {
+      text-transform: uppercase;
+      position: relative;
       display: inline-block;
+      cursor: pointer;
+      margin-bottom: 0;
+
+      input[type="submit"] {
+        border: 0;
+        position: absolute;
+        left: 0;
+        cursor: pointer;
+        padding: .2rem;
+        line-height: 1;
+        background-color: transparent;
+      }
+
+      &:hover {
+        color: $colorPrimaryTint;
+      }
     }
-  }
-}
-
-.presetLocked {
-  padding-left: 0;
-  margin-right: 3px;
-
-  i:before {
-    content: url('../img/lock.svg');
-    margin-right: .2rem;
-    vertical-align: 2px;
-  }
-}
-
-.remove-preset {
-  width: 100%;
-
-  input[type="submit"] {
-    border: 0;
-    cursor: pointer;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: transparent;
   }
 }
 
@@ -228,16 +223,20 @@
   input {
     height: 3.2rem;
     margin-bottom: 0;
+    border-radius: 0;
   }
 
   input[type='submit'] {
+    font-size: 1.2rem;
+    line-height: 1;
+    font-weight: 300;
     align-self: flex-end;
     background-color: $colorPrimary;
     color: $colorBackground;
     border: 2px solid $colorPrimary;
     border-left: 0;
     margin-left: 0rem;
-    flex-basis: 20px;
+    flex-basis: 30px;
 
     &:hover {
       background-color: $linkHoverColor;
@@ -245,63 +244,65 @@
   }
 }
 
-.help-text {
-  font-size: .875rem;
-  font-style: italic;
-}
-
 .bugListCheck {
   position: relative;
-  padding: .4rem 0 0 0;
 
   th&,
   td& {
-    width: 15px;
-    padding: 1rem 0 0 0;
-    text-align: center;
-  }
-
-  th& {
-    label {
-      position: absolute;
-      top: 0;
-      left: 0;
-      opacity: 0;
-    }
+    overflow: visible;
+    width: 34px;
 
     input {
-      position: absolute;
-      top: 15px;
-      left: 0;
+      left: 1rem;
+    }
 
+    label {
       &:before {
-        left: 1rem;
+        left: .5rem;
       }
     }
   }
 
-  tr:first-of-type td& input:before {
-    top: 0;
-  }
-
-  td& {
-    padding: 0 0 1rem 0;
+  th& {
+    input {
+      top: 1.25rem;
+    }
 
     label {
       position: absolute;
-      top: 0;
-      left: 0;
-      opacity: 0;
-    }
-
-    input {
-      margin-top: 0;
-      position: relative;
-      min-width: 15px;
+      top: 1rem;
 
       &:before {
-        top: 10px;
-        left: 1rem;
+        top: 0;
+        left: .3rem;
+        width: 15px;
+        height: 15px;
+      }
+
+      &:after {
+        content: attr(data-label);
+        position: absolute;
+        opacity: 0;
+      }
+    }
+  }
+
+  tr:first-of-type td& label:before {
+    top: 1.25rem;
+  }
+
+  td& {
+    position: relative;
+    label {
+
+      &:before {
+        top: .7rem;
+      }
+
+      &:after {
+        content: attr(data-label);
+        position: absolute;
+        opacity: 0;
       }
     }
   }
@@ -310,27 +311,131 @@
 
 // Bug Table Cells
 .bugListNumber {
+  th& {
+    min-width: 80px;
+    width: 80px;
+  }
 
-  &td {
-    font-family: $fontMonospace;
-    letter-spacing: 1px;
+  td& {
+    letter-spacing: .4px;
   }
 }
 
-.bugListState {
+.bugListState,
+.bugListPriority {
   td& {
     text-transform: uppercase;
-    font-size: 80%;
-    letter-spacing: .02rem;
+    font-size: 75%;
+    letter-spacing: .04rem;
     font-weight: 600;
 
     span {
+      min-height: 34px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       border: 1px solid currentColor;
-      display: inline-block;
       width: 100%;
       text-align: center;
       padding: 4px 4px 2px 4px;
       line-height: 1.2;
+    }
+  }
+}
+
+.bugListState {
+  th& {
+    width: 115px;
+  }
+}
+
+.bugListPriority {
+  th& {
+    width: 110px;
+  }
+}
+
+.bugListProject {
+  th& {
+    width: 160px;
+  }
+
+  td& {
+  }
+}
+
+.bugListBug {
+  th& {
+    width: 20%;
+  }
+  td& {
+    a {
+      font-size: .875rem;    }
+  }
+}
+
+.bugListCreator {
+  width: 80px;
+}
+
+.bugListLastModified {
+  td& {
+    time {
+      text-transform: none;
+      font-family: $fontPrimary;
+    }
+  }
+}
+
+.bugListAssignedTo,
+.bugListCreator {
+
+  th& {
+    width: 108px;
+  }
+}
+
+.bugListPriority {
+
+  .priority-1 & {
+    span {
+      background-color: transparentize($successColor, .15);
+      color: $colorBackground;
+      border-color: darken($successColor, 10%);
+
+      &:before {
+        background-image: url('../img/infinity.svg');
+        content: '';
+        background-size: contain;
+        background-repeat: no-repeat;
+        display: inline-block;
+        width: 12px;
+        height: 9px;
+        position: relative;
+        bottom: 0;
+        margin-right: 4px;
+      }
+    }
+  }
+
+  .priority-3 & {
+    span {
+      color: $colorBackground;
+      background-color: $errorColor;
+      border-color: darken($errorColor, 15%);
+
+      &:before {
+        background-image: url('../img/alert.svg');
+        content: '';
+        background-size: contain;
+        background-repeat: no-repeat;
+        display: inline-block;
+        width: 9px;
+        height: 9px;
+        position: relative;
+        bottom: 2px;
+        margin-right: 4px;
+      }
     }
   }
 }
@@ -345,7 +450,6 @@
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
-    font-size: 80%;
     font-family: $fontMonospace;
     font-size: 1rem;
     padding: .2rem 1rem;
@@ -422,93 +526,4 @@
   margin-top: 2rem;
   color: $blue;
   background-color: transparent;
-}
-
-// Bulk Actions
-.offCanvasForm {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  background-color: $colorPrimaryShade;
-  width: 100%;
-  border-top: 4px solid $colorPrimary;
-  box-shadow: 0 -2px 0 2px transparentize($colorPrimary, .9);
-  padding-top: 1rem;
-  padding-bottom: 2rem;
-  transform: translateY(100%);
-  transition: transform .2s ease-out;
-  z-index: 2;
-
-  &.active {
-    transform: translateY(0);
-  }
-
-  &__inner {
-    @include inner;
-    padding: 1rem;
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    grid-column-gap: 2rem;
-
-    > p:first-of-type {
-      grid-column: 1 / end;
-      border-bottom: 1px solid $colorPrimary;
-      text-transform: uppercase;
-      font-family: $fontMonospace;
-      letter-spacing: 2px;
-      font-weight: 700;
-      padding-bottom: 1rem;
-    }
-
-    .comment {
-      max-height: 140px;
-
-      textarea {
-        width: 100%;
-        min-height: 0;
-        max-height: 100px;
-      }
-    }
-
-    .nestedAction {
-      margin-right: 1rem;
-    }
-
-    button,
-    button:hover,
-    label,
-    p {
-      color: $offWhite;
-    }
-
-    button:not([disabled]) {
-      background-color: $colorPrimaryTint;
-      border-color: $colorPrimary;
-
-      &:hover {
-        opacity: .8;
-      }
-
-      &.cancel {
-        background-color: $red;
-      }
-    }
-
-    button[disabled] {
-      color: rgba(255, 255, 255, .5);
-      background-color: rgba(0,0,0,.5);
-    }
-
-    .actions {
-      grid-row: 3;
-      padding-top: 1rem;
-      grid-column: 1 / end;
-      justify-content: center;
-      border-top: 0;
-
-      button:last-of-type {
-        margin-right: 0;
-      }
-    }
-  }
 }

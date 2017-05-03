@@ -1,7 +1,12 @@
+{% load static buggy_tags %}
+
 <li class="presetItem">
-  <a href="{{ preset.url }}"><span>{{ preset.name }}</span></a>
   <form action="{% url 'buggy:remove_preset' pk=preset.pk %}" method="post" class="remove-preset">
     {% csrf_token %}
-    <input type="submit" value="">
+    <label><i class="presetDelete">{% svg 'img/delete.svg' %}</i><input type="submit" value=""></label>
   </form>
+  <a href="{{ preset.url }}">
+    <span>{{ preset.name }}</span>
+  </a>
+
 </li>

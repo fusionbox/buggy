@@ -51,17 +51,15 @@
 
 .bugDetailCurrentState,
 .bugDetailActionDescription {
-  display: flex;
   font-family: $fontMonospace;
-  margin-bottom: 1.5rem;
-  font-size: 1rem;
+  margin-bottom: 1rem;
+  font-size: .925rem;
   max-width: 42rem;
   line-height: 1.4;
 
   > strong {
-    @include noSelection;
     font-weight: 400;
-    margin-right: .25rem;
+    margin-right: .5rem;
     font-size: 1.2rem;
     display: inline-block;
     position: relative;
@@ -69,12 +67,51 @@
   }
 }
 
+.bugTitleChange {
+  span {
+    font-family: $fontMonospace;
+    background-color: $insetBorder;
+    padding: .2rem .5rem;
+    display: inline-block;
+  }
+}
+
+.bugStateInline {
+  border: 1px solid currentColor;
+  display: inline-block;
+  padding-left: .35rem;
+  padding-right: .35rem;
+  text-transform: uppercase;
+  letter-spacing: .75px;
+  font-size: 80%;
+}
+
+.bugDetailActionDescription {
+  font-weight: 700;
+}
+
+blockquote {
+  background-color: $offWhiteDark;
+  margin: 0;
+  border: 4px solid $offWhiteXDark;
+  padding: .75rem 1rem;
+  color: darken($offWhite, 90%);
+
+  a:not(.button) {
+    color: inherit;
+  }
+}
 
 .bugDetailAction {
-  @include topStroke(2px);
+  @include topStroke($borderWidth: 2px, $borderColor: transparentize($colorPrimaryTint, 50%));
   padding-top: 2rem;
   padding-bottom: 2rem;
   max-width: 64rem;
+  font-size: .875rem;
+
+  time {
+    font-size: .875rem;
+  }
 
   ul,
   ol {
@@ -84,6 +121,10 @@
     li {
       margin-bottom: .2rem;
     }
+  }
+
+  p {
+    font-size: inherit;
   }
 
   .attachments {
@@ -120,11 +161,16 @@
   }
 }
 
+.bugDetailActionComment {
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
 .bugMetadataTitle {
   font-size: 2.1rem;
   max-width: 48rem;
   font-weight: 700;
   margin-top: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: .5rem;
   line-height: 1.1;
 }

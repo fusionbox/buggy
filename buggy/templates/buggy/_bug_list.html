@@ -11,8 +11,8 @@
     <thead>
       <tr>
         <th class="bugListCheck">
-          <label for="check_all_bugs">Check all bugs</label>
           <input id="check_all_bugs" type="checkbox">
+          <label for="check_all_bugs" data-label="Check all bugs"></label>
         </th>
         <th class="bugListNumber">
           <a href="{{ sort_links.number }}" data-pjax{% if sort_by == 'number'%} class="active{% if sort_desc %} desc{% endif %}"{% endif %}>
@@ -63,8 +63,8 @@
       {% for bug in bugs %}
       <tr class="state-{{ bug.state.value }} priority-{{ bug.priority.value }}" data-number="{{ bug.number }}">
         <td class="bugListCheck">
-          <label for="bulk-select-checkbox-{{bug.id}}">Select {{ bug.number }}</label>
           <input type="checkbox" name="bugs" value="{{ bug.id }}" id="bulk-select-checkbox-{{bug.id}}">
+          <label for="bulk-select-checkbox-{{bug.id}}" data-label="Select {{ bug.number }}"></label>
         </td>
         <td class="bugListNumber">{{ bug.number }}</td>
         <td class="bugListProject">{{ bug.project }}</td>
@@ -73,7 +73,7 @@
         <td class="bugListCreator">{{ bug.created_by.get_short_name }}</td>
         <td class="bugListAssignedTo">{{ bug.assigned_to.get_short_name }}</td>
         <td class="bugListState"><span>{{ bug.state.label }}</span></td>
-        <td class="bugListPriority">{{ bug.priority.label }}</td>
+        <td class="bugListPriority"><span>{{ bug.priority.label }}</span></td>
       </tr>
       {% endfor %}
     </tbody>

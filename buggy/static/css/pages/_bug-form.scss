@@ -9,7 +9,6 @@
   max-width: 32rem;
 }
 
-
 .bugFormActionBar {
   display: flex;
 
@@ -29,7 +28,7 @@
   .attachments,
   .priority,
   .assign_to {
-    @include topStroke(4px);
+    @include topStroke($borderWidth: 4px);
     padding-top: 1rem;
     flex: 1 1 auto;
   }
@@ -40,22 +39,27 @@
 }
 
 .actions {
-  @include topStroke(2px);
   display: flex;
-  padding-top: 2rem;
+  justify-content: flex-end;
 
   button {
     margin-right: 1rem;
     font-size: .875rem;
+    min-height: 48px;
+
+    &.open, &.cancel {
+      margin-right: 0;
+    }
+
+    &[value='entrusted'] {
+      margin-right: 0;
+      margin-left: 1rem;
+    }
   }
 }
 
 .subActions {
   display: flex;
-
-  &:last-of-type {
-    margin-right: 0;
-  }
 }
 
 .commentMarkdown {
@@ -72,8 +76,8 @@
 
 .previewTarget {
   font-size: 1.2rem;
-  background-color: rgba(0,0,0,.01);
-  color: rgba(0,0,0,.75);
+  background-color: rgba(0, 0, 0, .01);
+  color: rgba(0, 0, 0, .75);
   width: 100%;
   padding: 1rem;
   border: 2px solid currentColor;

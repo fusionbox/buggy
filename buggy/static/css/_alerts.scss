@@ -21,11 +21,12 @@
     font-weight: 400;
     letter-spacing: .4px;
     display: inline-block;
+    border-radius: 4px;
 
     &:before {
       height: 10px;
       display: inline-block;
-      margin-right: .4rem;
+      margin-right: .5rem;
       vertical-align: -1px;
     }
   }
