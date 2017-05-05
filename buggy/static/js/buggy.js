@@ -189,6 +189,13 @@ jQuery(function($) {
   });
 
   setActiveBulkActions();
+
+  // prevent double submissions
+  $('form').on('submit', function() {
+    $(this).on('click', 'button[type="submit"]', function() {
+      return false;
+    });
+  });
 });
 
 jQuery.pjax.defaults.scrollTo = false;
