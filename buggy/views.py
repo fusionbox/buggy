@@ -156,7 +156,7 @@ class BugListView(LoginRequiredMixin, ListView):
             return (order_field, bool(self.request.GET.get('desc')))
 
 
-class BugMutationMixin(object):
+class BugMutationMixin(LoginRequiredMixin):
     mutator_class = BuggyBugMutator
 
     @cached_property
@@ -197,7 +197,7 @@ class BugMutationMixin(object):
         return kwargs
 
 
-class BugDetailView(LoginRequiredMixin, BugMutationMixin, FormView):
+class BugDetailView(BugMutationMixin, FormView):
     template_name = 'buggy/bug_detail.html'
 
     queryset = Bug.objects.select_related(
