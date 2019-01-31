@@ -233,7 +233,6 @@ class Comment(Operation):
         extension = BuggyExtension()
         html = safe_markdown(self.comment, extensions=[
             'markdown.extensions.extra',
-            'markdown.extensions.headerid',
             extension
         ])
         return (html, extension.mentioned_users, extension.mentioned_bugs)
